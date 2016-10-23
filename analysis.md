@@ -49,19 +49,45 @@ Step01_makedirs.sh
 XXXX CAMILLA DID THE FOLLOWING, BUT THIS WILL NEED TO BE UPDATED WHEN THE FINAL DATA IS AVAILABLE ON THE EBI PUBLIC WEBSITE.
 
 ```shell
+# Change into download directory
 cd /PATH/TO/MARC/PHASE2/data/01-fast5
 
+# Typical MARC Phase 1 2D run
 ncftp -u dcc_marc XXXX
+ln -s /path/to/P1b-Lab2-R2 P1b-Lab2-R2-2D
 
+# Lab6 (UBC) 1D and 2D run
 ncftp -u dcc_marc ftp://ftp.dcc-private.ebi.ac.uk/data/ERA716/ERA716428/oxfordnanopore_native/
 ls -l
 mget *.tar.gz
 quit
+tar -zxvf UBC_MARC_1D_R9_107_Called.tar.gz
+ln -s Chip93_MARC_1D_UBC_Called_107 P2-Lab6-R1-1D
+tar -zxvf UBC_MARC_2D_R9_107_Called.tar.gz
+ln -s UBC_MARC_2D_R9_107_Called P2-Lab6-R1-2D
 
+# Lab7 (Nottingham) 1D and 2D run
 ncftp -u dcc_marc ftp://ftp.dcc-private.ebi.ac.uk/data/ERA706/ERA706812/oxfordnanopore_native/
 ls -l
 mget *.tar.gz
 quit
+tar -zxvf Nott_R9_run2_1D.tar.gz
+mkdir Nott_R9_run2_1D
+mv -i reads Nott_R9_run2_1D
+chmod -R a+r *
+chmod a+rwx Nott_R9_run2_1D
+chmod a+rwx Nott_R9_run2_1D/reads
+chmod a+rwx Nott_R9_run2_1D/reads/downloads
+chmod a+rwx Nott_R9_run2_1D/read/downloads/fail
+chmod a+rwx Nott_R9_run2_1D/reads/downlloads/pass
+ln -s Nott_R9_run2_1D P2-Lab7-R1-1D
+tar -zxvf Nott_R92_2D.tar.gz
+chmod -R a+r marc_bridging_2D_run
+chmod a+rwx marc_bridging_2D_run
+chmod a+rwx marc_bridging_2D_run/downloads
+chmod a+rwx marc_bridging_2D_run/downloads/fail
+chmod a+rwx marc_bridging_2D_run/downloads/pass
+ln -s marc_bridging_2D_run P2-Lab7-R1-2D
 ```
 
 Your 01-fast5 directory must now contain files:
