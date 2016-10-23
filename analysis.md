@@ -105,3 +105,32 @@ Your data/01-fast5 directory should now contain files:
 ```
 
 Make a copy of the scripts/expt_template.txt file called 'expt.txt', and change the paths to reflect your data hierarchy.
+
+### Step 03 : Extract FASTQ files
+
+1. Change directory to data/02-fastq.
+2. Use poretools to extract the fastq records from each set of FAST5 files, then create symbolic links to each file according to phase-lab-replicate-library-readtype-readclass.fastq naming convention.
+
+Dir data/02-fastq should now contain:
+
+```shell
+P1b-Lab2-R2-2D-1C-fail.fastq
+P1b-Lab2-R2-2D-1C-pass.fastq
+P1b-Lab2-R2-2D-1T-fail.fastq
+P1b-Lab2-R2-2D-1T-pass.fastq
+P1b-Lab2-R2-2D-2D-fail.fastq
+P1b-Lab2-R2-2D-2D-pass.fastq
+P2-Lab6-R1-1D-1D-fail.fastq
+P2-Lab6-R1-1D-1D-pass.fastq
+P2-Lab6-R1-2D-1D-fail.fastq
+P2-Lab6-R1-2D-1D-pass.fastq
+P2-Lab6-R1-2D-2D-fail.fastq
+P2-Lab6-R1-2D-2D-pass.fastq
+P2-Lab7-R1-1D-1D-fail.fastq
+P2-Lab7-R1-1D-1D-pass.fastq
+P2-Lab7-R1-2D-1D-fail.fastq
+P2-Lab7-R1-2D-1D-pass.fastq
+P2-Lab7-R1-2D-2D-fail.fastq
+P2-Lab7-R1-2D-2D-pass.fastq
+```
+
