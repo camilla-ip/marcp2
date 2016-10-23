@@ -23,16 +23,16 @@ CPUs:
 Environment
 - A linux system with bash environment.
 
-### Step 1 : Set up analysis directories and environment
+### Step 01 : Set up analysis directories and environment
 
 ```shell
 cd /path/to/scripts
-cp config-template.txt config.txt
+cp config_template.txt config.txt
 # Update paths in config.txt for your file system
 Step01_makedirs.sh
 ```
 
-### Step 2 : Download and extract the FAST5 data
+### Step 02 : Download and set up the FAST5 data and experiment directories
 
 1. cd /PATH/TO/MARC/PHASE2/data/01-fast5
 2. Download the tarball of FAST5 data for each experiment from the EBI (using ncftp or similar).
@@ -90,17 +90,18 @@ chmod a+rwx marc_bridging_2D_run/downloads/pass
 ln -s marc_bridging_2D_run P2-Lab7-R1-2D
 ```
 
-Your 01-fast5 directory must now contain files:
+Your data/01-fast5 directory should now contain files:
 ```shell
-/PATH/TO/MARC/PHASE2/data/01-fast5/P1-LabX-R1/reads/downloads/pass/*.fast5
-/PATH/TO/MARC/PHASE2/data/01-fast5/P1-LabX-R1/reads/downloads/pass/*.fast5
-/PATH/TO/MARC/PHASE2/data/01-fast5/P2-Lab6-R1-1D/reads/downloads/fail/*.fast5
-/PATH/TO/MARC/PHASE2/data/01-fast5/P2-Lab6-R1-1D/reads/downloads/pass/*.fast5
-/PATH/TO/MARC/PHASE2/data/01-fast5/P2-Lab6-R1-2D/reads/downloads/fail/*.fast5
-/PATH/TO/MARC/PHASE2/data/01-fast5/P2-Lab6-R1-2D/reads/downloads/pass/*.fast5
-...
-/PATH/TO/MARC/PHASE2/data/01-fast5/P2-Lab7-R1-2D/reads/downloads/pass/*.fast5
+/PATH/TO/data/01-fast5/P1b-Lab2-R2-2D/reads/downloads/pass/*.fast5
+/PATH/TO/data/01-fast5/P1b-Lab2-R2-2D/reads/downloads/fail/*.fast5
+/PATH/TO/data/01-fast5/P2-Lab6-R1-1D/reads/downloads/fail/*.fast5
+/PATH/TO/data/01-fast5/P2-Lab6-R1-1D/reads/downloads/pass/*.fast5
+/PATH/TO/data/01-fast5/P2-Lab6-R1-2D/reads/downloads/fail/*.fast5
+/PATH/TO/data/01-fast5/P2-Lab6-R1-2D/reads/downloads/pass/*.fast5
+/PATH/TO/data/01-fast5/P2-Lab7-R1-1D/reads/downloads/fail/*.fast5
+/PATH/TO/data/01-fast5/P2-Lab7-R1-1D/reads/downloads/pass/*.fast5
+/PATH/TO/data/01-fast5/P2-Lab7-R1-2D/reads/downloads/fail/*.fast5
+/PATH/TO/data/01-fast5/P2-Lab7-R1-2D/reads/downloads/pass/*.fast5
 ```
 
-Make a copy of the scripts/expt-template.txt file called 'expt.txt', and change the paths to reflect your data hierarchy.
-
+Make a copy of the scripts/expt_template.txt file called 'expt.txt', and change the paths to reflect your data hierarchy.
