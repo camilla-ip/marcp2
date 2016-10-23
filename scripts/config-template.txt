@@ -15,7 +15,7 @@
 
 [environment]
 MP2_DIR=/path/to/marcp2
-MP2_SCRIPTS=/path/to/marcp2/scripts
-MP2_DATA=/path/to/marcp2/data
+MP2_BIN=/path/to/marcp2/scripts
+MP2_DAT=/path/to/marcp2/data
 
 # ============================================================================ #

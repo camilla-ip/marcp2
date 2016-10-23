@@ -25,15 +25,56 @@ Environment
 
 ### Step 1 : Set up analysis directories and environment
 
-Environment variables:
-
 ```shell
-export MP2_DIR=/path/to/marcp2
-export MP2_BIN=${MP2_DIR}/scripts
-export MP2_DATIN=${MP2_DIR}/data/in
-export MP2_DATOUT=${MP2_DIR}/data/out
+cd /path/to/scripts
+cp config-template.txt config.txt
+# Update paths in config.txt for your file system
+Step01_makedirs.sh
 ```
 
-We assume that you will download the complete set of 
+### Step 2 : Download and extract the FAST5 data
 
-export $MP2=
+1. cd /PATH/TO/MARC/PHASE2/data/01-fast5
+2. Download the tarball of FAST5 data for each experiment from the EBI (using ncftp or similar).
+3. Extract the files from the tar.gz files, creating directories and moving files until you have the files for each experiment in the structure:
+
+```shell
+/PATH/TO/MARC/PHASE2/data/01-fast5/EXPTNAME/*.log
+/PATH/TO/MARC/PHASE2/data/01-fast5/EXPTNAME/reads/downloads/fail/*.fast5
+/PATH/TO/MARC/PHASE2/data/01-fast5/EXPTNAME/reads/downloads/pass/*.fast5
+```
+4. Decide on a consistent naming convention for each experiment. We used the names: P1-LabX-R1, P2-Lab6-R1-1D, P2-Lab6-R1-2D, P2-Lab7-R1-1D, P2-Lab7-R1-2D.
+5. Create symbolic links from the actual experiment directories with the preferred names.
+
+XXXX CAMILLA DID THE FOLLOWING, BUT THIS WILL NEED TO BE UPDATED WHEN THE FINAL DATA IS AVAILABLE ON THE EBI PUBLIC WEBSITE.
+
+```shell
+cd /PATH/TO/MARC/PHASE2/data/01-fast5
+
+ncftp -u dcc_marc XXXX
+
+ncftp -u dcc_marc ftp://ftp.dcc-private.ebi.ac.uk/data/ERA716/ERA716428/oxfordnanopore_native/
+ls -l
+mget *.tar.gz
+quit
+
+ncftp -u dcc_marc ftp://ftp.dcc-private.ebi.ac.uk/data/ERA706/ERA706812/oxfordnanopore_native/
+ls -l
+mget *.tar.gz
+quit
+```
+
+Your 01-fast5 directory must now contain files:
+```shell
+/PATH/TO/MARC/PHASE2/data/01-fast5/P1-LabX-R1/reads/downloads/pass/*.fast5
+/PATH/TO/MARC/PHASE2/data/01-fast5/P1-LabX-R1/reads/downloads/pass/*.fast5
+/PATH/TO/MARC/PHASE2/data/01-fast5/P2-Lab6-R1-1D/reads/downloads/fail/*.fast5
+/PATH/TO/MARC/PHASE2/data/01-fast5/P2-Lab6-R1-1D/reads/downloads/pass/*.fast5
+/PATH/TO/MARC/PHASE2/data/01-fast5/P2-Lab6-R1-2D/reads/downloads/fail/*.fast5
+/PATH/TO/MARC/PHASE2/data/01-fast5/P2-Lab6-R1-2D/reads/downloads/pass/*.fast5
+...
+/PATH/TO/MARC/PHASE2/data/01-fast5/P2-Lab7-R1-2D/reads/downloads/pass/*.fast5
+```
+
+Make a copy of the scripts/expt-template.txt file called 'expt.txt', and change the paths to reflect your data hierarchy.
+
