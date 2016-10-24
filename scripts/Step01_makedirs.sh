@@ -4,7 +4,7 @@
 MP2_DIR=`cat config.txt | grep MP2_DIR | cut -f2 -d'='`
 MP2_BIN=`cat config.txt | grep MP2_BIN | cut -f2 -d'='`
 MP2_DAT=`cat config.txt | grep MP2_DAT | cut -f2 -d'='`
-subdirs="01-fast5 02-fastq 03-bwamem 04-marginalign 05-nanook 06-readstats 07-analysis 08-manuscript"
+subdirs="01-fast5 02-fastq 03-bwamem 04-poreqc 05-marginalign 06-nanook 07-results 08-manuscript"
 
 # FUNCTIONS
 function makedir()
