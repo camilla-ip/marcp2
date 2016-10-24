@@ -9,9 +9,9 @@ generated
 ### Pre-requisites
 
 Third-party software (specified version or higher):
-- poretools  XXXX 
-- SAMtools  XXXX
-- bwa XXXX
+- poretools 0.5.1
+- SAMtools 0.1.19-44428cd
+- bwa 0.7.12-r1039
 
 Disk storage:
 - XXXX TB for raw data
@@ -23,7 +23,7 @@ CPUs:
 Environment
 - A linux system with bash environment.
 
-### Step 01 : Set up analysis directories and environment
+### Step 00 : Set up analysis directories and environment
 
 ```shell
 cd /path/to/scripts
@@ -32,7 +32,7 @@ cp config_template.txt config.txt
 Step01_makedirs.sh
 ```
 
-### Step 02 : Download and set up the FAST5 data and experiment directories
+### Step 01 : Download and set up the FAST5 data and experiment directories
 
 1. cd /PATH/TO/MARC/PHASE2/data/01-fast5
 2. Download the tarball of FAST5 data for each experiment from the EBI (using ncftp or similar).
@@ -106,7 +106,7 @@ Your data/01-fast5 directory should now contain files:
 
 Make a copy of the scripts/expt_template.txt file called 'expt.txt', and change the paths to reflect your data hierarchy.
 
-### Step 03 : Extract FASTQ files
+### Step 02 : Extract FASTQ files
 
 1. Change directory to data/02-fastq.
 2. Use poretools to extract the fastq records from each set of FAST5 files, then create symbolic links to each file according to phase-lab-replicate-library-readtype-readclass.fastq naming convention.
@@ -133,4 +133,31 @@ P2-Lab7-R1-2D-1D-pass.fastq
 P2-Lab7-R1-2D-2D-fail.fastq
 P2-Lab7-R1-2D-2D-pass.fastq
 ```
+
+### Step 03 : Map reads with bwa mem
+
+To set up the reference files:
+
+1. Download the Escherichia coli str. K-12 substr. MG1655 target genome from RefSeq  at https://www.ncbi.nlm.nih.gov/nuccore/NC_000913.3 in FASTA format, and set the contigid to be "NC_000913.3".
+2. Download the ONT lambda phage genome, which differs at a few positions from the version in RefSeq, from XXXX in FASTA format.
+3. Concatenate the two input files into a single file called "data/03-bwamem/references.fasta".
+5. Ensure there is a newline on the last line of the file and the file contains Unix-style newline characters.
+4. Generate the bwa indices with command "bwa index references.fasta".
+
+The data/03-bwamem directory should now contain files:
+
+```shell
+references.fasta
+references.fasta.amb
+references.fasta.ann
+references.fasta.bwt
+references.fasta.pac
+references.fasta.sa
+```
+
+iXXXX NEED TO FILL THIS IN LATER
+
+### Step 04 : Generate per-read statistics with poreqc
+
+Run the Step04_runporeqc.sh script to generate the output directories, shell script, and execute them using nohup.
 
