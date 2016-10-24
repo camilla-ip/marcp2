@@ -58,7 +58,7 @@ sys.path.insert(0, os.path.dirname(os.path.realpath(sys.argv[0])))
 _progdir = None
 _progname = None
 _intdir = None
-_version = '0.2.10'
+_version = '0.3.0'
 _progdesc = 'poreqc sequencing run report v{0}'.format(_version)
 
 _ErrorFileMissing = 23

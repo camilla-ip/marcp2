@@ -119,7 +119,9 @@ def Get_RawFast5Version(hdf):
     if len(hdf.keys()) == 3 and 'Key' in hdf.keys() and 'Reads' in hdf.keys() and 'Sequences' in hdf.keys():
         version = 'raw_v1'
     elif len(hdf.keys()) == 3 and 'Analyses' in hdf.keys() and 'Sequences' in hdf.keys() and 'UniqueGlobalKey' in hdf.keys():
-        version= 'raw_v2'
+        version = 'raw_v2'
+    elif len(hdf.keys()) == 3 and 'Analyses' in hdf.keys() and 'Raw' in hdf.keys() and 'UniqueGlobalKey' in hdf.keys():
+        version = 'raw_v3'
     return version
 
 def Get_ReadStatsFromFile(fast5_path):
@@ -128,8 +130,15 @@ def Get_ReadStatsFromFile(fast5_path):
     if os.stat(fast5_path).st_size == 0:
         sys.stdout.write('Warn: Ignoring empty file ({0})\n'.format(fast5_path))
         return None
-    run_number = '_'.join(fast5_filename.split('_')[-5:-3])
-    file_number = int(fast5_filename.split('_')[-2].replace('file', ''))
+    # CI 2016-10-24: Since R9, filename convention is
+    # HOSTNAME_STARTDATE_FLOWCELLID_DEVICEID_sequencing_run_SAMPLEID_RUNNUMBER_chNNN_readNNN_strand.fast5
+    # so just set the file_number to the read number.
+    #run_number = '_'.join(fast5_filename.split('_')[-5:-3])
+    run_number = fast5_filename.split('_')[-4]
+    try:
+        file_number = int(fast5_filename.split('_')[-2].replace('file', ''))
+    except:
+        file_number = int(fast5_filename.split('_')[-2].replace('read', ''))
     try:
         hdf = h5py.File(fast5_path, 'r')
     except:
@@ -159,6 +168,11 @@ def Get_ReadStatsFromFile(fast5_path):
         sample_rate = float(hdf[key3].attrs['sample_rate'])
         start = hdf[key3].attrs['start']
         start_mux = hdf[key3].attrs['start_mux']
+        median_before = hdf[key3].attrs['median_before']
+        numerical_encoding = ''.join(hdf[key4].attrs['numerical_encoding']),
+        precision = ''.join(hdf[key4].attrs['precision']),
+        tool = ''.join(hdf[key4].attrs['tool']),
+        version = ''.join(hdf[key4].attrs['version']),
 
     elif raw_fast5_version == 'raw_v2':
         channel_number =  int(hdf['UniqueGlobalKey/channel_id'].attrs['channel_number'])
@@ -172,6 +186,30 @@ def Get_ReadStatsFromFile(fast5_path):
         sample_rate = float(hdf['UniqueGlobalKey/channel_id'].attrs['sampling_rate'])
         start = hdf[key3].attrs['start_time']
         start_mux = hdf[key3].attrs['start_mux']
+        median_before = hdf[key3].attrs['median_before']
+        numerical_encoding = ''.join(hdf[key4].attrs['numerical_encoding']),
+        precision = ''.join(hdf[key4].attrs['precision']),
+        tool = ''.join(hdf[key4].attrs['tool']),
+        version = ''.join(hdf[key4].attrs['version']),
+
+    elif raw_fast5_version == 'raw_v3':
+
+        channel_number =  int(hdf['UniqueGlobalKey/channel_id'].attrs['channel_number'])
+        read_number = int(hdf['Analyses/EventDetection_000/Reads'].keys()[0].split('_')[1])
+        key2 = 'UniqueGlobalKey/tracking_id'
+        key3 = 'Analyses/EventDetection_000/Reads/Read_{0}'.format(read_number)
+        key4 = 'Sequences/Meta'
+        keyevents = 'Analyses/EventDetection_000/Reads/Read_{0}/Events'.format(read_number)
+        startidx = 0 if not _args.inreadsarecalled else 2
+        event_count = hdf['Analyses/EventDetection_000/Reads/Read_{0}/Events'.format(read_number)].len()
+        sample_rate = float(hdf['UniqueGlobalKey/channel_id'].attrs['sampling_rate'])
+        start = hdf[key3].attrs['start_time']
+        start_mux = hdf[key3].attrs['start_mux']
+        median_before = 0.0
+        numerical_encoding = ''
+        precision = ''
+        tool = ''
+        version = ''
 
     elif raw_fast5_version == 'unknown':
         sys.stdout.write('Erro: Unrecognised raw fast5 file format - please investigate\n')
@@ -260,14 +298,14 @@ def Get_ReadStatsFromFile(fast5_path):
         hdf[key2].attrs['run_id'],
         hdf[key2].attrs['version_name'],
         event_count,
-        hdf[key3].attrs['median_before'],
+        median_before,
         sample_rate,
         start,
         start_mux,
-        ''.join(hdf[key4].attrs['numerical_encoding']),
-        ''.join(hdf[key4].attrs['precision']),
-        ''.join(hdf[key4].attrs['tool']),
-        ''.join(hdf[key4].attrs['version']),
+        numerical_encoding,
+        precision,
+        tool,
+        version,
         read_start_seconds,
         read_end_seconds,
         read_start_localtime_iso,
@@ -450,10 +488,11 @@ def Extract_ActiveChannels():
     H = ['time_bucket_since_expt_start_hrs', 'num_active_channels']
     with open(_activechannels_path, 'w') as active_fp:
         active_fp.write('{0}\n'.format('\t'.join(H)))
-        for bucket in np.arange(0, max(active_channels.keys())+interval, interval):
-            num_active = len(active_channels[bucket]) if active_channels.has_key(bucket) else 0
-            R = [bucket, num_active]
-            active_fp.write('{0}\n'.format('\t'.join([str(x) for x in R])))
+        if len(active_channels.keys()):
+            for bucket in np.arange(0, max(active_channels.keys())+interval, interval):
+                num_active = len(active_channels[bucket]) if active_channels.has_key(bucket) else 0
+                R = [bucket, num_active]
+                active_fp.write('{0}\n'.format('\t'.join([str(x) for x in R])))
 
 def Extract_FillDelay():
     '''

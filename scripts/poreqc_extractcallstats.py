@@ -60,11 +60,11 @@ _rawcall_dtype = [
     ('read_start_localtime_iso', 'S100'),
     ('read_end_localtime_iso', 'S100'),
     ('read_start_hours_since_expt_start', np.float),
-    ('read_start_hours_since_expt_start_qtrhrbucketname', np.float),
+    ('read_start_hours_since_expt_start_qtrhrbucketname', 'S20'),
     ('read_end_hours_since_expt_start', np.float),
-    ('read_end_hours_since_expt_start_qtrhrbucketname', np.float),
+    ('read_end_hours_since_expt_start_qtrhrbucketname', 'S20'),
     ('read_end_hours_since_read_start', np.float),
-    ('read_end_hours_since_read_start_qtrhrbucketname', np.float),
+    ('read_end_hours_since_read_start_qtrhrbucketname', 'S20'),
     ('event_count', np.int),
     ('events_per_second', np.float),
     # Analyses
@@ -127,8 +127,8 @@ _rawcall_dtype = [
     ('split_hairpin_num_temp', np.int),
     ('split_hairpin_split_index', np.int),
     # Analyses/WORKFLOWNAME_000/Configuration/general
-    ('min_events', np.int),
-    ('max_events', np.int),
+    ('min_events', 'S20'),
+    ('max_events', 'S20'),
     ('model_type', 'S50'),
     ('workflow_name', 'S100'),
     ('workflow_script', 'S100'),
@@ -207,8 +207,15 @@ def Read_ReadStatsSimpFile():
 def Get_CallStatsFromFile(fast5_path, twod_readclass):
     'Parse the fast5 analysed file and return a np.array of the statistics.'
     fast5_filename = os.path.basename(fast5_path)
-    run_number = '_'.join(fast5_filename.split('_')[-5:-3])
-    file_number = fast5_filename.split('_')[-2].replace('file', '')
+    # CI 2016-10-24: Since R9, filename convention is
+    # HOSTNAME_STARTDATE_FLOWCELLID_DEVICEID_sequencing_run_SAMPLEID_RUNNUMBER_chNNN_readNNN_strand.fast5
+    # so just set the file_number to the read number.
+    #run_number = '_'.join(fast5_filename.split('_')[-5:-3])
+    run_number = str(fast5_filename.split('_')[-4])
+    try:
+        file_number = int(fast5_filename.split('_')[-2].replace('file', ''))
+    except:
+        file_number = int(fast5_filename.split('_')[-2].replace('read', ''))
     if os.stat(fast5_path)[stat.ST_SIZE] == 0:
         sys.stderr.write('Erro: analysed fast5 file has length of zero - ignoring ({0})\n'.format(fast5_path))
         return None
@@ -255,11 +262,17 @@ def Get_CallStatsFromFile(fast5_path, twod_readclass):
     run_id = hdf[key].attrs['run_id']
     version_name = hdf[key].attrs['version_name']
 
-    key = 'Sequences/Meta'
-    numerical_encoding = ''.join(hdf[key].attrs['numerical_encoding'])
-    precision = ''.join(hdf[key].attrs['precision'])
-    tool = ''.join(hdf[key].attrs['tool'])
-    version = ''.join(hdf[key].attrs['version'])
+    try:
+        key = 'Sequences/Meta'
+        numerical_encoding = ''.join(hdf[key].attrs['numerical_encoding'])
+        precision = ''.join(hdf[key].attrs['precision'])
+        tool = ''.join(hdf[key].attrs['tool'])
+        version = ''.join(hdf[key].attrs['version'])
+    except:
+        numerical_encoding = ''
+        precision = ''
+        tool = ''
+        version = ''
 
     key = 'Analyses/EventDetection_000/Reads/Read_{0}'.format(read_number)
     keyevents = 'Analyses/EventDetection_000/Reads/Read_{0}/Events'.format(read_number)
@@ -300,7 +313,10 @@ def Get_CallStatsFromFile(fast5_path, twod_readclass):
     key = 'Analyses/{0}'.format(analyses_workflow)
     name = hdf[key].attrs['name']		# metrichor
     time_stamp = hdf[key].attrs['time_stamp']	# YYYY-Mmm-DD HH:MM:SS
-    nameversion = hdf[key].attrs['version']	# metrichor version (?)
+    try:
+        nameversion = hdf[key].attrs['version']	# metrichor version (?)
+    except:
+        nameversion = hdf[key].attrs['dragonet version']
     has_template = 'BaseCalled_template' in hdf[key].keys()
     has_complement = 'BaseCalled_complement' in hdf[key].keys()
     has_2D = 'BaseCalled_2D' in hdf[key].keys()
@@ -435,8 +451,8 @@ def Get_CallStatsFromFile(fast5_path, twod_readclass):
         except:
             workflow_script = ''
     else:
-        min_events = 0
-        max_events = 0
+        min_events = '0'
+        max_events = '0'
         model_type = ''
         workflow_name = ''
         workflow_script = ''
