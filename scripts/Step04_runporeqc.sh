@@ -18,7 +18,7 @@ tail -n +2 expt.txt | while read exptid phase lab replicate libtype dirpath ; do
         rm ${shfile}
         touch ${shfile}
     fi
-    echo "\#!/usr/bin/env bash" >> ${shfile}
+    echo "#!/usr/bin/env bash" >> ${shfile}
     echo >> ${shfile}
     echo "echo \"Started\"" >> ${shfile}
     echo >> ${shfile}
