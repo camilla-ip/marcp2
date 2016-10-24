@@ -263,6 +263,7 @@ _call_dtype = [
     ('template_events_start_time', np.float),
     ('template_events_duration', np.float),
     ('template_fastq_seqlen', np.int),
+    ('template_fastq_gc', 'S10'),
     ('template_fastq_bqlen', np.int),
     ('template_fastq_bqmean', np.float),
     ('template_fastq_bqmedian', np.float),
@@ -271,6 +272,7 @@ _call_dtype = [
     ('complement_events_start_time', np.float),
     ('complement_events_duration', np.float),
     ('complement_fastq_seqlen', np.int),
+    ('complement_fastq_gc', 'S10'),
     ('complement_fastq_bqlen', np.int),
     ('complement_fastq_bqmean', np.float),
     ('complement_fastq_bqmedian', np.float),
@@ -278,6 +280,7 @@ _call_dtype = [
     # Analyses/WORKFLOW_NAME/BaseCalled_2D
     # XXXX - Still need to work out how to extract the Alignment from here - template, complement, kmer
     ('twod_fastq_seqlen', np.int),
+    ('twod_fastq_gc', 'S10'),
     ('twod_fastq_bqlen', np.int),
     ('twod_fastq_bqmean', np.float),
     ('twod_fastq_bqmedian', np.float),

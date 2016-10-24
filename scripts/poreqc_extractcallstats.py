@@ -12,6 +12,7 @@ Extract MinION base-call statistics
 # ============================================================================ #
 
 import argparse, datetime, h5py, math, numpy as np, os, random, re, shlex, stat, sys, time
+from Bio.SeqUtils import GC
 
 # ============================================================================ #
 # Global variables                                                             #
@@ -136,6 +137,7 @@ _rawcall_dtype = [
     ('template_events_start_time', np.float),
     ('template_events_duration', np.float),
     ('template_fastq_seqlen', np.int),
+    ('template_fastq_gc', 'S10'),
     ('template_fastq_bqlen', np.int),
     ('template_fastq_bqmean', np.float),
     ('template_fastq_bqmedian', np.float),
@@ -144,6 +146,7 @@ _rawcall_dtype = [
     ('complement_events_start_time', np.float),
     ('complement_events_duration', np.float),
     ('complement_fastq_seqlen', np.int),
+    ('complement_fastq_gc', 'S10'),
     ('complement_fastq_bqlen', np.int),
     ('complement_fastq_bqmean', np.float),
     ('complement_fastq_bqmedian', np.float),
@@ -151,6 +154,7 @@ _rawcall_dtype = [
     # Analyses/WORKFLOW_NAME/BaseCalled_2D
     # XXXX - Still need to work out how to extract the Alignment from here - template, complement, kmer
     ('twod_fastq_seqlen', np.int),
+    ('twod_fastq_gc', 'S10'),
     ('twod_fastq_bqlen', np.int),
     ('twod_fastq_bqmean', np.float),
     ('twod_fastq_bqmedian', np.float),
@@ -464,6 +468,7 @@ def Get_CallStatsFromFile(fast5_path, twod_readclass):
         key = 'Analyses/{0}/BaseCalled_template/Fastq'.format(analyses_workflow)
         template_fastqL = str(hdf['Analyses/{0}/BaseCalled_template/Fastq'.format(analyses_workflow)][()]).split('\n')
         template_fastq_seqlen = len(template_fastqL[1])
+        template_fastq_gc = '{0:.1f}'.format(GC(template_fastqL[1]))
         template_fastq_bqlen = len(template_fastqL[3])
         A = np.array([ord(x)-33 for x in str(hdf['Analyses/{0}/BaseCalled_template/Fastq'.format(analyses_workflow)][()]).split('\n')[3]])
         template_fastq_bqmean = np.mean(A)
@@ -473,6 +478,7 @@ def Get_CallStatsFromFile(fast5_path, twod_readclass):
         template_events_start_time = 0.0
         template_events_duration = 0.0
         template_fastq_seqlen = 0
+        template_fastq_gc = '0.0'
         template_fastq_bqlen = 0
         template_fastq_bqmean = 0.0
         template_fastq_bqmedian = 0.0
@@ -486,6 +492,7 @@ def Get_CallStatsFromFile(fast5_path, twod_readclass):
         A = np.array([ord(x)-33 for x in str(hdf['Analyses/{0}/BaseCalled_complement/Fastq'.format(analyses_workflow)][()]).split('\n')[3]])
         complement_fastqL = str(hdf['Analyses/{0}/BaseCalled_complement/Fastq'.format(analyses_workflow)][()]).split('\n')
         complement_fastq_seqlen = len(complement_fastqL[1])
+        complement_fastq_gc = '{0:.1f}'.format(GC(complement_fastqL[1]))
         complement_fastq_bqlen = len(complement_fastqL[3])
         complement_fastq_bqmean = np.mean(A)
         complement_fastq_bqmedian = np.median(A)
@@ -494,6 +501,7 @@ def Get_CallStatsFromFile(fast5_path, twod_readclass):
         complement_events_start_time = 0.0
         complement_events_duration = 0.0
         complement_fastq_seqlen = 0
+        complement_fastq_gc = '0.0'
         complement_fastq_bqlen = 0
         complement_fastq_bqmean = 0.0
         complement_fastq_bqmedian = 0.0
@@ -504,12 +512,14 @@ def Get_CallStatsFromFile(fast5_path, twod_readclass):
         A = np.array([ord(x)-33 for x in str(hdf['Analyses/{0}/BaseCalled_2D/Fastq'.format(analyses_workflow)][()]).split('\n')[3]])
         twod_fastqL = str(hdf['Analyses/{0}/BaseCalled_2D/Fastq'.format(analyses_workflow)][()]).split('\n')
         twod_fastq_seqlen = len(twod_fastqL[1])
+        twod_fastq_gc = '{0:.1f}'.format(GC(twod_fastqL[1]))
         twod_fastq_bqlen = len(twod_fastqL[3])
         twod_fastq_bqmean = np.mean(A)
         twod_fastq_bqmedian = np.median(A)
         twod_numN = twod_fastqL[1].upper().count('N')
     else:
         twod_fastq_seqlen = 0
+        twod_fastq_gc = '0.0'
         twod_fastq_bqlen = 0
         twod_fastq_bqmean = 0.0
         twod_fastq_bqmedian = 0.0
@@ -605,6 +615,7 @@ def Get_CallStatsFromFile(fast5_path, twod_readclass):
         template_events_start_time,
         template_events_duration,
         template_fastq_seqlen,
+        template_fastq_gc,
         template_fastq_bqlen,
         template_fastq_bqmean,
         template_fastq_bqmedian,
@@ -612,11 +623,13 @@ def Get_CallStatsFromFile(fast5_path, twod_readclass):
         complement_events_start_time,
         complement_events_duration,
         complement_fastq_seqlen,
+        complement_fastq_gc,
         complement_fastq_bqlen,
         complement_fastq_bqmean,
         complement_fastq_bqmedian,
         complement_numN,
         twod_fastq_seqlen,
+        twod_fastq_gc,
         twod_fastq_bqlen,
         twod_fastq_bqmean,
         twod_fastq_bqmedian,
