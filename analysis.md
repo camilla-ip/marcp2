@@ -33,48 +33,47 @@ Environment
 
 To download the marcoporo package:
 ```shell
-cd /YOUR/PATH/TO/PACKAGES
+cd /PATH/TO/YOUR/PACKAGES
 git clone git@github.com:camilla-ip/marcoporo.git
-export PATH=${PATH}:/YOUR/PATH/TO/PACKAGES/marcoporo
+export PATH=${PATH}:/PATH/TO/YOUR/PACKAGES/marcoporo
 ```
 
 To download the scripts:
 ```shell
-mkdir -p /YOUR/PATH/TO/ANALYSES/MYSTUDY
-cd ${MP2}
+mkdir -p /PATH/TO/YOUR/ANALYSIS
 git clone git@github.com:camilla-ip/marcp2.git
 export MP2=/YOUR/PATH/TO/ANALYSES/MYSTUDY/marcp2
 ```
 
 To set up the analysis parameters:
 
-1. export MARCOPORO=/YOUR/PATH/TO/PACKAGES/marcoporo
+1. export MARCOPORO=/PATH/TO/YOUR/PACKAGES/marcoporo
 2. mkdir ${MP2}/data/00-config
 3. cp ${MARCOPORO}/v1/config_example.txt ${MP2}/data/00-config/config.txt
 4. Edit config.txt for your file system and computing resources, setting up a new top-level
-'dirpath' for each experiment called /PATH/TO/ANALYSIS/MYDIR/marcp2/data/00-fast5/EXPTID
+'dirpath' for each experiment called /PATH/TO/YOUR/ANALYSIS/marcp2/data/00-fast5/EXPTID
 5. cp ${MARCOPORO}/v1/experiment_example.txt ${MP2}/data/00-config/experiment.txt
 6. Edit experiment.txt for your data sets.
 
-### Step 1 : Download experiment data (as FAST5)
+### Step 1 : Download FAST5 experiment data
 
 1. Use ncftp (or similar) to download the FAST5 and log files for each experiment.
 
-Your data/01-fast5 directory should now contain files:
+Your ${MP2}/data/01-fast5 directory should now contain files:
 ```shell
-/PATH/TO/ANALYSIS/MYDIR/marcp2/data/01-fast5/P1b-Lab2-R2-2D/reads/downloads/pass/*.fast5
-/PATH/TO/ANALYSIS/MYDIR/marcp2/data/01-fast5/P1b-Lab2-R2-2D/reads/downloads/fail/*.fast5
-/PATH/TO/ANALYSIS/MYDIR/marcp2/data/01-fast5/P2-Lab6-R1-1D/reads/downloads/fail/*.fast5
-/PATH/TO/ANALYSIS/MYDIR/marcp2/data/01-fast5/P2-Lab6-R1-1D/reads/downloads/pass/*.fast5
-/PATH/TO/ANALYSIS/MYDIR/marcp2/data/01-fast5/P2-Lab6-R1-2D/reads/downloads/fail/*.fast5
-/PATH/TO/ANALYSIS/MYDIR/marcp2/data/01-fast5/P2-Lab6-R1-2D/reads/downloads/pass/*.fast5
-/PATH/TO/ANALYSIS/MYDIR/marcp2/data/01-fast5/P2-Lab7-R1-1D/reads/downloads/fail/*.fast5
-/PATH/TO/ANALYSIS/MYDIR/marcp2/data/01-fast5/P2-Lab7-R1-1D/reads/downloads/pass/*.fast5
-/PATH/TO/ANALYSIS/MYDIR/marcp2/data/01-fast5/P2-Lab7-R1-2D/reads/downloads/fail/*.fast5
-/PATH/TO/ANALYSIS/MYDIR/marcp2/data/01-fast5/P2-Lab7-R1-2D/reads/downloads/pass/*.fast5
+/PATH/TO/YOUR/ANALYSIS/marcp2/data/01-fast5/P1b-Lab2-R2-2D/reads/downloads/pass/*.fast5
+/PATH/TO/YOUR/ANALYSIS/marcp2/data/01-fast5/P1b-Lab2-R2-2D/reads/downloads/fail/*.fast5
+/PATH/TO/YOUR/ANALYSIS/marcp2/data/01-fast5/P2-Lab6-R1-1D/reads/downloads/fail/*.fast5
+/PATH/TO/YOUR/ANALYSIS/marcp2/data/01-fast5/P2-Lab6-R1-1D/reads/downloads/pass/*.fast5
+/PATH/TO/YOUR/ANALYSIS/marcp2/data/01-fast5/P2-Lab6-R1-2D/reads/downloads/fail/*.fast5
+/PATH/TO/YOUR/ANALYSIS/marcp2/data/01-fast5/P2-Lab6-R1-2D/reads/downloads/pass/*.fast5
+/PATH/TO/YOUR/ANALYSIS/marcp2/data/01-fast5/P2-Lab7-R1-1D/reads/downloads/fail/*.fast5
+/PATH/TO/YOUR/ANALYSIS/marcp2/data/01-fast5/P2-Lab7-R1-1D/reads/downloads/pass/*.fast5
+/PATH/TO/YOUR/ANALYSIS/marcp2/data/01-fast5/P2-Lab7-R1-2D/reads/downloads/fail/*.fast5
+/PATH/TO/YOUR/ANALYSIS/marcp2/data/01-fast5/P2-Lab7-R1-2D/reads/downloads/pass/*.fast5
 ```
 
-### Step 2 : Extract experiment metadata (marcoporo parameters)
+### Step 2 : Extract sequencing metadata (marcoporo parameters)
 
 ### Step 3 : Extract experiment-level statistics (marcoporo runstats)
 
@@ -92,8 +91,7 @@ Your data/01-fast5 directory should now contain files:
 
 ### Step 10 : Generate MARC Phase 2 files
 
-
-### ===
+### ===================
 
 ### Step 00 : Set up analysis directories and environment
 
