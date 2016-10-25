@@ -46,14 +46,15 @@ export MP2=/YOUR/PATH/TO/ANALYSES/MYSTUDY/marcp2
 ```
 
 To set up the analysis parameters:
-
-1. export MARCOPORO=/PATH/TO/YOUR/PACKAGES/marcoporo
-2. mkdir ${MP2}/data/00-config
-3. cp ${MARCOPORO}/v1/config_example.txt ${MP2}/data/00-config/config.txt
-4. Edit config.txt for your file system and computing resources, setting up a new top-level
+```shell
+export MARCOPORO=/PATH/TO/YOUR/PACKAGES/marcoporo
+mkdir ${MP2}/data/00-config
+cp ${MARCOPORO}/v1/config_example.txt ${MP2}/data/00-config/config.txt
+# Edit config.txt for your file system and computing resources, setting up a new top-level
 'dirpath' for each experiment called /PATH/TO/YOUR/ANALYSIS/marcp2/data/00-fast5/EXPTID
-5. cp ${MARCOPORO}/v1/experiment_example.txt ${MP2}/data/00-config/experiment.txt
-6. Edit experiment.txt for your data sets.
+cp ${MARCOPORO}/v1/experiment_example.txt ${MP2}/data/00-config/experiment.txt
+Edit experiment.txt for your data sets.
+```
 
 ### Step 1 : Download FAST5 experiment data
 
@@ -73,7 +74,7 @@ Your ${MP2}/data/01-fast5 directory should now contain files:
 /PATH/TO/YOUR/ANALYSIS/marcp2/data/01-fast5/P2-Lab7-R1-2D/reads/downloads/pass/*.fast5
 ```
 
-### Step 2 : Extract sequencing metadata (marcoporo parameters)
+### Step 2 : Extract sequencing parameters (marcoporo seqparams)
 
 ### Step 3 : Extract experiment-level statistics (marcoporo runstats)
 
