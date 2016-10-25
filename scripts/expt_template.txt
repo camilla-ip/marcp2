@@ -1,6 +1,0 @@
-exptid	phase	lab	replicate	libtype	dirpath
-P1b-Lab2-R2-2D	P1b	Lab2	R2	2D	/well/bsg/microbial/marc/phase2/analysis/data/01-fast5/P1b-Lab2-R2-2D
-P2-Lab6-R1-1D	P2	Lab6	R1	1D	/well/bsg/microbial/marc/phase2/analysis/data/01-fast5/P2-Lab6-R1-1D
-P2-Lab6-R1-2D	P2	Lab6	R1	2D	/well/bsg/microbial/marc/phase2/analysis/data/01-fast5/P2-Lab6-R1-2D
-P2-Lab7-R1-1D	P2	Lab7	R1	1D	/well/bsg/microbial/marc/phase2/analysis/data/01-fast5/P2-Lab7-R1-1D
-P2-Lab7-R1-2D	P2	Lab7	R1	2D	/well/bsg/microbial/marc/phase2/analysis/data/01-fast5/P2-Lab7-R1-2D
