@@ -22,7 +22,8 @@ Disk storage:
 - XXXX TB for analysis output files
 
 CPUs / cores:
-- As many as possible. The scripts will run on a multi-core server or a cluster with Sun Grid Engine (SGE) scheduling.
+- As many as possible. The scripts will run on a multi-core server or a cluster with
+Sun Grid Engine (SGE) scheduling.
 
 Environment
 - A linux system with bash environment.
@@ -46,10 +47,12 @@ export MP2=/YOUR/PATH/TO/ANALYSES/MYSTUDY/marcp2
 ```
 
 To set up the analysis parameters:
+
 1. export MARCOPORO=/YOUR/PATH/TO/PACKAGES/marcoporo
 2. mkdir ${MP2}/data/00-config
 3. cp ${MARCOPORO}/v1/config_example.txt ${MP2}/data/00-config/config.txt
-4. Edit config.txt for your file system and computing resources, setting up a new top-level 'dirpath' for each experiment called /PATH/TO/ANALYSIS/MYDIR/marcp2/data/00-fast5/EXPTID
+4. Edit config.txt for your file system and computing resources, setting up a new top-level
+'dirpath' for each experiment called /PATH/TO/ANALYSIS/MYDIR/marcp2/data/00-fast5/EXPTID
 5. cp ${MARCOPORO}/v1/experiment_example.txt ${MP2}/data/00-config/experiment.txt
 6. Edit experiment.txt for your data sets.
 
@@ -61,14 +64,14 @@ Your data/01-fast5 directory should now contain files:
 ```shell
 /PATH/TO/ANALYSIS/MYDIR/marcp2/data/01-fast5/P1b-Lab2-R2-2D/reads/downloads/pass/*.fast5
 /PATH/TO/ANALYSIS/MYDIR/marcp2/data/01-fast5/P1b-Lab2-R2-2D/reads/downloads/fail/*.fast5
-/PATH/TO/data/01-fast5/P2-Lab6-R1-1D/reads/downloads/fail/*.fast5
-/PATH/TO/data/01-fast5/P2-Lab6-R1-1D/reads/downloads/pass/*.fast5
-/PATH/TO/data/01-fast5/P2-Lab6-R1-2D/reads/downloads/fail/*.fast5
-/PATH/TO/data/01-fast5/P2-Lab6-R1-2D/reads/downloads/pass/*.fast5
-/PATH/TO/data/01-fast5/P2-Lab7-R1-1D/reads/downloads/fail/*.fast5
-/PATH/TO/data/01-fast5/P2-Lab7-R1-1D/reads/downloads/pass/*.fast5
-/PATH/TO/data/01-fast5/P2-Lab7-R1-2D/reads/downloads/fail/*.fast5
-/PATH/TO/data/01-fast5/P2-Lab7-R1-2D/reads/downloads/pass/*.fast5
+/PATH/TO/ANALYSIS/MYDIR/marcp2/data/01-fast5/P2-Lab6-R1-1D/reads/downloads/fail/*.fast5
+/PATH/TO/ANALYSIS/MYDIR/marcp2/data/01-fast5/P2-Lab6-R1-1D/reads/downloads/pass/*.fast5
+/PATH/TO/ANALYSIS/MYDIR/marcp2/data/01-fast5/P2-Lab6-R1-2D/reads/downloads/fail/*.fast5
+/PATH/TO/ANALYSIS/MYDIR/marcp2/data/01-fast5/P2-Lab6-R1-2D/reads/downloads/pass/*.fast5
+/PATH/TO/ANALYSIS/MYDIR/marcp2/data/01-fast5/P2-Lab7-R1-1D/reads/downloads/fail/*.fast5
+/PATH/TO/ANALYSIS/MYDIR/marcp2/data/01-fast5/P2-Lab7-R1-1D/reads/downloads/pass/*.fast5
+/PATH/TO/ANALYSIS/MYDIR/marcp2/data/01-fast5/P2-Lab7-R1-2D/reads/downloads/fail/*.fast5
+/PATH/TO/ANALYSIS/MYDIR/marcp2/data/01-fast5/P2-Lab7-R1-2D/reads/downloads/pass/*.fast5
 ```
 
 ### Step 2 : Extract experiment metadata (marcoporo parameters)
@@ -105,7 +108,8 @@ Step01_makedirs.sh
 
 1. cd /PATH/TO/MARC/PHASE2/data/01-fast5
 2. Download the tarball of FAST5 data for each experiment from the EBI (using ncftp or similar).
-3. Extract the files from the tar.gz files, creating directories and moving files until you have the files for each experiment in the structure:
+3. Extract the files from the tar.gz files, creating directories and moving files until you have
+the files for each experiment in the structure:
 
 ```shell
 /PATH/TO/MARC/PHASE2/data/01-fast5/EXPTNAME/*.log
