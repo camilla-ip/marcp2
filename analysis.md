@@ -49,10 +49,10 @@ To set up the analysis parameters:
 ```shell
 export MARCOPORO=/PATH/TO/YOUR/PACKAGES/marcoporo
 mkdir ${MP2}/data/00-config
-cp ${MARCOPORO}/v1/config_example.txt ${MP2}/data/00-config/config.txt
+cp ${MARCOPORO}/v1.0/config_example.txt ${MP2}/data/00-config/config.txt
 # Edit config.txt for your file system and computing resources, setting up a new top-level
 'dirpath' for each experiment called /PATH/TO/YOUR/ANALYSIS/marcp2/data/00-fast5/EXPTID
-cp ${MARCOPORO}/v1/experiment_example.txt ${MP2}/data/00-config/experiment.txt
+cp ${MARCOPORO}/v1.0/experiment_example.txt ${MP2}/data/00-config/experiment.txt
 Edit experiment.txt for your data sets.
 ```
 
@@ -75,6 +75,22 @@ Your ${MP2}/data/01-fast5 directory should now contain files:
 ```
 
 ### Step 2 : Extract sequencing parameters (marcoporo seqparams)
+
+- Tabulate the metadata fields that are constant within each experiment. Save the results
+in file data/02-seqparams/seqparams.txt.
+- The default number of FAST5 files from each
+experiment to inspect before deciding which fields are constant defaults to 100, but
+can be specified with '-samplesize INT'.
+
+```shell
+marcoporo.py seqparams \
+-config /PATH/TO/YOUR/ANALYSIS/marcp2/data/00-config/config.txt \
+-experiments /PATH/TO/YOUR/ANALYSIS/marcp2/data/00-config/experiments.txt \
+-outdir /PATH/TO/YOUR/ANALYSIS/marcp2/data/02-seqparams
+```
+
+Find the set of metadata fields that are constant within each experiment, then tabulate
+the values of these fields 
 
 ### Step 3 : Extract experiment-level statistics (marcoporo runstats)
 
