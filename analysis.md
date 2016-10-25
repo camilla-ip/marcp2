@@ -9,19 +9,88 @@ generated
 ### Pre-requisites
 
 Third-party software (specified version or higher):
+- bwa 0.7.12-r1039
+- git
+- marcoporo 1.0.0
+- marginAlign XXXX
+- nanook XXXX
 - poretools 0.5.1
 - SAMtools 0.1.19-44428cd
-- bwa 0.7.12-r1039
 
 Disk storage:
 - XXXX TB for raw data
 - XXXX TB for analysis output files
 
-CPUs:
-- We assume you have access to a multi-core server or a cluster with Sun Grid Engine (SGE) scheduling.
+CPUs / cores:
+- As many as possible. The scripts will run on a multi-core server or a cluster with Sun Grid Engine (SGE) scheduling.
 
 Environment
 - A linux system with bash environment.
+- If you have access to an SGE cluster, the scripts must be executed on an SGE submit node.
+
+### Step 0 : Download scripts & set up analysis parameters
+
+To download the marcoporo package:
+```shell
+cd /YOUR/PATH/TO/PACKAGES
+git clone git@github.com:camilla-ip/marcoporo.git
+export PATH=${PATH}:/YOUR/PATH/TO/PACKAGES/marcoporo
+```
+
+To download the scripts:
+```shell
+mkdir -p /YOUR/PATH/TO/ANALYSES/MYSTUDY
+cd ${MP2}
+git clone git@github.com:camilla-ip/marcp2.git
+export MP2=/YOUR/PATH/TO/ANALYSES/MYSTUDY/marcp2
+```
+
+To set up the analysis parameters:
+1. export MARCOPORO=/YOUR/PATH/TO/PACKAGES/marcoporo
+2. mkdir ${MP2}/data/00-config
+3. cp ${MARCOPORO}/v1/config_example.txt ${MP2}/data/00-config/config.txt
+4. Edit config.txt for your file system and computing resources, setting up a new top-level 'dirpath' for each experiment called /PATH/TO/ANALYSIS/MYDIR/marcp2/data/00-fast5/EXPTID
+5. cp ${MARCOPORO}/v1/experiment_example.txt ${MP2}/data/00-config/experiment.txt
+6. Edit experiment.txt for your data sets.
+
+### Step 1 : Download experiment data (as FAST5)
+
+1. Use ncftp (or similar) to download the FAST5 and log files for each experiment.
+
+Your data/01-fast5 directory should now contain files:
+```shell
+/PATH/TO/ANALYSIS/MYDIR/marcp2/data/01-fast5/P1b-Lab2-R2-2D/reads/downloads/pass/*.fast5
+/PATH/TO/ANALYSIS/MYDIR/marcp2/data/01-fast5/P1b-Lab2-R2-2D/reads/downloads/fail/*.fast5
+/PATH/TO/data/01-fast5/P2-Lab6-R1-1D/reads/downloads/fail/*.fast5
+/PATH/TO/data/01-fast5/P2-Lab6-R1-1D/reads/downloads/pass/*.fast5
+/PATH/TO/data/01-fast5/P2-Lab6-R1-2D/reads/downloads/fail/*.fast5
+/PATH/TO/data/01-fast5/P2-Lab6-R1-2D/reads/downloads/pass/*.fast5
+/PATH/TO/data/01-fast5/P2-Lab7-R1-1D/reads/downloads/fail/*.fast5
+/PATH/TO/data/01-fast5/P2-Lab7-R1-1D/reads/downloads/pass/*.fast5
+/PATH/TO/data/01-fast5/P2-Lab7-R1-2D/reads/downloads/fail/*.fast5
+/PATH/TO/data/01-fast5/P2-Lab7-R1-2D/reads/downloads/pass/*.fast5
+```
+
+### Step 2 : Extract experiment metadata (marcoporo parameters)
+
+### Step 3 : Extract experiment-level statistics (marcoporo runstats)
+
+### Step 4 : Extract read-level statistics (marcoporo callstats)
+
+### Step 5 : Extract basecalls (poretools)
+
+### Step 6 : Map basecalls (bwa mem)
+
+### Step 7 : Improve basecall alignments (marginAlign) 
+
+### Step 8 : Generate QC reports (nanook)
+
+### Step 9 : Generate comparison tables and plots
+
+### Step 10 : Generate MARC Phase 2 files
+
+
+### ===
 
 ### Step 00 : Set up analysis directories and environment
 
