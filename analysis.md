@@ -58,7 +58,7 @@ Edit experiment.txt for your data sets.
 
 ### Step 1 : Download FAST5 experiment data
 
-1. Use ncftp (or similar) to download the FAST5 and log files for each experiment.
+Use ncftp (or similar) to download the FAST5 and log files for each experiment.
 
 Your ${MP2}/data/01-fast5 directory should now contain files:
 ```shell
@@ -74,23 +74,20 @@ Your ${MP2}/data/01-fast5 directory should now contain files:
 /PATH/TO/YOUR/ANALYSIS/marcp2/data/01-fast5/P2-Lab7-R1-2D/reads/downloads/pass/*.fast5
 ```
 
-### Step 2 : Extract sequencing parameters (marcoporo seqparams)
+### Step 2 : Extract sequencing parameters (marcoporo runmeta)
 
-- Tabulate the metadata fields that are constant within each experiment. Save the results
-in file data/02-seqparams/seqparams.txt.
-- The default number of FAST5 files from each
-experiment to inspect before deciding which fields are constant defaults to 100, but
-can be specified with '-samplesize INT'.
+Tabulate the metadata fields that are constant within each experiment. Save the results
+in file data/02-runmeta/runmeta.txt.
+
+The default number of FAST5 files from each experiment to inspect before deciding which
+fields are constant defaults to 100, but can be specified with '-samplesize INT'.
 
 ```shell
-marcoporo.py seqparams \
+marcoporo.py runmeta \
 -config /PATH/TO/YOUR/ANALYSIS/marcp2/data/00-config/config.txt \
 -experiments /PATH/TO/YOUR/ANALYSIS/marcp2/data/00-config/experiments.txt \
--outdir /PATH/TO/YOUR/ANALYSIS/marcp2/data/02-seqparams
+-outdir /PATH/TO/YOUR/ANALYSIS/marcp2/data/02-runmeta
 ```
-
-Find the set of metadata fields that are constant within each experiment, then tabulate
-the values of these fields 
 
 ### Step 3 : Extract experiment-level statistics (marcoporo runstats)
 
