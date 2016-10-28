@@ -74,6 +74,36 @@ Your ${MP2}/data/01-fast5 directory should now contain files:
 /PATH/TO/YOUR/ANALYSIS/marcp2/data/01-fast5/P2-Lab7-R1-2D/reads/downloads/pass/*.fast5
 ```
 
+### Step 2 : Extract experiment and read metadata (marcoporo extract)
+
+Each sequenced DNA molecule results in a basecalled FAST5 file that documents:
+
+1. the experimental set-up;
+2. the experimental conditions;
+3. the segmented events;
+4. how methods and models used to convert the events into basecalls; and
+5. the basecalls in FASTQ format.
+
+While many people are only interested in the FASTQ basecalls, it can also be useful
+to extract (all or parts of) the metadata when comparing runs.
+
+In this step, the program opens '-samplesize' reads from each experiment to (quickly)
+infer the fields that are constant across each run. Then, it opens each FAST5 and
+extracts various tables of data, as specified by the boolean command-line options.
+
+```shell
+marcoporo.py extract \
+-config /PATH/TO/YOUR/ANALYSIS/marcp2/data/00-config/config.txt \
+-experiments /PATH/TO/YOUR/ANALYSIS/marcp2/data/00-config/experiments.txt \
+-samplesize 100 \
+-outdir /PATH/TO/YOUR/ANALYSIS/marcp2/data/02-extract \
+-share True \   # Shared experiment-level attributes and their values (share.txt)
+-fastq True \   # 1D and 2D basecalls (EXPTID_[1T|1C|2D].fastq)
+-model True \   # Model parameters for each k-mer (EXPTID_model.txt)
+-pairs True \   # Name-value pairs for each experiment and read attribute (EXPTID_[expt|read]pairs.txt)
+-stats True     # Single-row summary stats for each experiment and read (EXPTID_[expt|read]stats.txt)
+```
+
 ### Step 2 : Extract sequencing parameters (marcoporo runmeta)
 
 Tabulate the metadata fields that are constant within each experiment. Save the results
@@ -89,9 +119,9 @@ marcoporo.py runmeta \
 -outdir /PATH/TO/YOUR/ANALYSIS/marcp2/data/02-runmeta
 ```
 
-### Step 3 : Extract experiment-level statistics (marcoporo runstats)
+### Step 3 : Extract read-level statistics (marcoporo callmeta)
 
-### Step 4 : Extract read-level statistics (marcoporo callstats)
+### Step 4 : Extract experiment-level statistics (marcoporo runstats)
 
 ### Step 5 : Extract basecalls (poretools)
 
