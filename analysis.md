@@ -11,7 +11,7 @@ generated
 Third-party software (specified version or higher):
 - bwa 0.7.12-r1039
 - git
-- marcoporo 1.0.0
+- marcoporo 1.0
 - marginAlign XXXX
 - nanook XXXX
 - poretools 0.5.1
@@ -74,34 +74,42 @@ Your ${MP2}/data/01-fast5 directory should now contain files:
 /PATH/TO/YOUR/ANALYSIS/marcp2/data/01-fast5/P2-Lab7-R1-2D/reads/downloads/pass/*.fast5
 ```
 
-### Step 2 : Extract experiment and read metadata (marcoporo extract)
+### Step 2 : Extract experimental constants and read metadata (marcoporo exptconstants and extract)
 
-Each sequenced DNA molecule results in a basecalled FAST5 file that documents:
+Each sequenced DNA molecule produces a basecalled FAST5 file containing:
 
-1. the experimental set-up;
-2. the experimental conditions;
-3. the segmented events;
-4. how methods and models used to convert the events into basecalls; and
-5. the basecalls in FASTQ format.
+1. the experimental conditions;
+2. the segmented events;
+3. how methods and models used to convert the events into basecalls; and
+4. the basecalls in FASTQ format.
 
-While many people are only interested in the FASTQ basecalls, it can also be useful
-to extract (all or parts of) the metadata when comparing runs.
+The basecalls are the most useful component, but inspecting the metadata can
+help you spot differences between experiments and plot metrics over time.
 
-In this step, the program opens '-samplesize' reads from each experiment to (quickly)
-infer the fields that are constant across each run. Then, it opens each FAST5 and
-extracts various tables of data, as specified by the boolean command-line options.
+First, inspect '-samplesize' reads from each experiment to quickly infer the fields that
+are constant across each run, then tabulate all found fields against the values in each
+experiment. Preliminary tests found that at least 200 randomly-selected reads are required
+to infer attributes that are the same for every read.
+
+```shell
+marcoporo.py exptconstants \
+-config /PATH/TO/YOUR/ANALYSIS/marcp2/data/00-config/config.txt \
+-experiments /PATH/TO/YOUR/ANALYSIS/marcp2/data/00-config/experiments.txt \
+-samplesize 250 \
+-outdir /PATH/TO/YOUR/ANALYSIS/marcp2/data/02-extract
+```
+
+Then, inspect each FAST5 in each experiment, and extract the data specified by the boolean
+command-line options.
 
 ```shell
 marcoporo.py extract \
 -config /PATH/TO/YOUR/ANALYSIS/marcp2/data/00-config/config.txt \
 -experiments /PATH/TO/YOUR/ANALYSIS/marcp2/data/00-config/experiments.txt \
--samplesize 100 \
 -outdir /PATH/TO/YOUR/ANALYSIS/marcp2/data/02-extract \
--share True \   # Shared experiment-level attributes and their values (share.txt)
 -fastq True \   # 1D and 2D basecalls (EXPTID_[1T|1C|2D].fastq)
--model True \   # Model parameters for each k-mer (EXPTID_model.txt)
--pairs True \   # Name-value pairs for each experiment and read attribute (EXPTID_[expt|read]pairs.txt)
--stats True     # Single-row summary stats for each experiment and read (EXPTID_[expt|read]stats.txt)
+-stats True \   # Single-row summary stats for each experiment and read (EXPTID_[expt|read]stats.txt)
+-pairs False    # Name-value pairs for each experiment and read attribute (EXPTID_[expt|read]pairs.txt)
 ```
 
 ### Step 2 : Extract sequencing parameters (marcoporo runmeta)
