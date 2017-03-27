@@ -1,18 +1,12 @@
 # MARC Phase 2 analysis
 
-This repository contains instructions and scripts for running the
-analyses presented in the MARC Phase 2 data release paper:
+This repository contains the scripts required to re-create the MARC Phase 2 analyses described in:
 
-XXXX CITATION
-
-The analysis.md file contains detailed instructions on how to download
-and set up the raw data, run the data pre-processing steps, generate
-the data presented in the paper and generate the figures presented in the
-paper.
+Jain M, Tyson JR, Loose M et al. MinION Analysis and Reference Consortium: Phase 2 data release and analysis of R9.0 chemistry [in submission]
 
 The scripts compare 5 experiments:
-- 1x 2D library run on R7 chemistry
-- 2x 1D libraries run on R9 chemistry
-- 2x 2D libraries run on R9 chemistry
+- 1x 2D library run on R7.4 chemistry
+- 2x 2D libraries run on R9.0 chemistry
+- 2x 1D libraries run on R9.0 chemistry
 
-The code can be used to compare other data, but has only been tested when there are exactly 5 experiments.
+Revision1 contains detailed instructions for downloading the raw data, software pre-requisites, setting up an analysis directoRY and running the scripts.
