@@ -2,7 +2,7 @@
 
 This repository contains the scripts required to re-create the MARC Phase 2 analyses described in:
 
-  Jain M, Tyson JR, Loose M *et al.* MinION Analysis and Reference Consortium: Phase 2 data release and analysis of R9.0 chemistry [*in submission*]
+> Jain M, Tyson JR, Loose M *et al.* MinION Analysis and Reference Consortium: Phase 2 data release and analysis of R9.0 chemistry [*in submission*]
 
 The scripts compare 5 experiments:
 - 1x 2D library run on R7.4 chemistry
