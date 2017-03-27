@@ -1,9 +1,11 @@
-## MARC Phase 2 analysis manual
+# MARC Phase 2 analysis manual
 
-### Overview
+## Overview
 
 The following instructions describe how to re-generate the analysis
-presented in Revision 1 of the MARC Phase 2 paper.
+presented in Revision 1 of the MARC Phase 2 study.
+
+## Pre-requisites
 
 ### Download and installation
 
@@ -38,15 +40,25 @@ Python packages:
 
 ### CPU requirements
 
-CPUs / cores:
-- As many as possible. The scripts will run on a multi-core server or a cluster with
+- The scripts will run on a multi-core server or a cluster with
 Sun Grid Engine (SGE) scheduling.
 
-Environment
-- A linux system with bash environment.
+### Environment
+- The scripts will run under Linux or Mac OS with a bash environment.
 - If you have access to an SGE cluster, the scripts must be executed on an SGE submit node.
 
-### Step 1 :
+## Running the analysis
+
+### Step 1 : Download the raw data
+### Step 2 : Set up reference sequences
+### Step 3 : 
+### Step 4 : 
+### Step 5 : 
+### Step 6 : 
+### Step 7 : 
+### Step 8 : 
+### Step 9 : 
+### Step 10 : 
 
 # ----- OLDER INSTRUCTIONS THAT NEED TO BE CHECKED -----
 
