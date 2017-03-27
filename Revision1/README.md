@@ -2,13 +2,19 @@
 
 ### Overview
 
-The following instructions will describe how to re-generate the analysis
-presented in the MARC Phase 2 data release paper from the MinION data
-generated
+The following instructions describe how to re-generate the analysis
+presented in Revision 1 of the MARC Phase 2 paper.
 
-### Pre-requisites
+### Download and installation
 
-Third-party software (specified version or higher):
+ cd <THIRD-PARTY-SOFTWARE-DIR>
+ git clone git@github.com:camilla-ip/marcp2.git
+
+You should now have a subdirectory called marcp2.
+
+### Software dependencies
+
+Third-party bioinformatics software (specified version or higher):
 - bwa 0.7.12-r1039
 - git
 - marcoporo 1.0
@@ -17,9 +23,18 @@ Third-party software (specified version or higher):
 - poretools 0.5.1
 - SAMtools 0.1.19-44428cd
 
-Disk storage:
+R packages:
+- XXXX
+
+Python packages:
+- XXXX
+
+### Disk storage requirements
+
 - XXXX TB for raw data
 - XXXX TB for analysis output files
+
+### CPU requirements
 
 CPUs / cores:
 - As many as possible. The scripts will run on a multi-core server or a cluster with
@@ -28,6 +43,10 @@ Sun Grid Engine (SGE) scheduling.
 Environment
 - A linux system with bash environment.
 - If you have access to an SGE cluster, the scripts must be executed on an SGE submit node.
+
+### Step 1 :
+
+# ----- OLDER INSTRUCTIONS THAT NEED TO BE CHECKED -----
 
 ### Step 0 : Download scripts & set up analysis parameters
 
