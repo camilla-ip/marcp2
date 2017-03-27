@@ -7,8 +7,10 @@ presented in Revision 1 of the MARC Phase 2 paper.
 
 ### Download and installation
 
- cd <THIRD-PARTY-SOFTWARE-DIR>
- git clone git@github.com:camilla-ip/marcp2.git
+```
+cd <THIRD-PARTY-SOFTWARE-DIR>
+git clone git@github.com:camilla-ip/marcp2.git
+```
 
 You should now have a subdirectory called marcp2.
 
