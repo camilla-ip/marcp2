@@ -1,24 +1,24 @@
-# MARC Phase 2 analysis manual
-
-## Overview
+# MARC Phase 2 analysis - Revision 1
 
 The following instructions describe how to re-generate the analysis
 presented in Revision 1 of the MARC Phase 2 study.
 
-## Pre-requisites
+## Assumptions
 
-### Download and installation
+The instructions assume you are using a Linux system with the BASH shell environment.
+
+## Step 1.  Download MARC Phase 2 analysis scripts (if required)
 
 ```
-cd <THIRD-PARTY-SOFTWARE-DIR>
+cd /PATH/TO/THIRD/PARTY/SOFTWARE
 git clone git@github.com:camilla-ip/marcp2.git
 ```
 
 You should now have a subdirectory called marcp2.
 
-### Software dependencies
+## Step 2.  Download third-party bioinformatics software.
 
-Third-party bioinformatics software (specified version or higher):
+These packages (with specified versions (or higher) need to be in your PATH environment variable:
 - bwa 0.7.12-r1039
 - git
 - marcoporo 1.0
