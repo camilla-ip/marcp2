@@ -8,8 +8,9 @@ Jain M, Tyson JR, Loose M, Ip CLC, Eccles DA, O\'Grady J, Malla S, Leggett RM, W
 
 Download this source hierarchy:
 
- cd /PATH/TO/YOUR/SCRIPTS
- git clone git@github.com:camilla-ip/marcp2.git
+```cd /PATH/TO/YOUR/SCRIPTS
+git clone git@github.com:camilla-ip/marcp2.git
+```
 
 Then follow instructions in the Revision1 sub-directory README file.
 
