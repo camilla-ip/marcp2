@@ -22,4 +22,8 @@ The study was an analysis of 5 experiments:
 - 2x 2D libraries run on R9.0 chemistry (new data produced for this study)
 - 2x 1D libraries run on R9.0 chemistry (new data produced this study)
 
-This sub-directory contains detailed instructions for downloading the raw data, software pre-requisites, setting up an analysis directory and running the scripts. It also includes a tiny sub-sample of the data to test the scripts are working.
+To replicate the MARC Phase 2 Revision 1 analysis, please follow the instructions in /PATH/TO/YOUR/SCRIPTS/Revision1/README.md
+
+It describes the third-party software required, how to test the scripts on a tiny sub-sample of the data, how to download the raw experimental data and run the analysis scripts.
+
+Contact camilla.ip@well.ox.ac.uk for more information or comment/bug reports.
