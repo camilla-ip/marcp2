@@ -2,7 +2,7 @@
 
 This repository contains the scripts required to re-create the MARC Phase 2 analyses described in:
 
-Jain M, Tyson JR, Loose M, Ip CLC, Eccles DA, O\'Grady J, Malla S, Leggett RM, Wallerman O, Jansen HJ, Zalunin V, Birney E, Brown BL, Snutch TP, Olsen HE, Minion Analysis and Reference Consortium. MinION Analysis and Reference Consortium: Phase 2 data release and analysis of R9.0 chemistry [*F1000, in submission*]
+Jain M, Tyson JR, Loose M, Ip CLC, Eccles DA, O\'Grady J, Malla S, Leggett RM, Wallerman O, Jansen HJ, Zalunin V, Birney E, Brown BL, Snutch TP, Olsen HE, MinION Analysis and Reference Consortium. MinION Analysis and Reference Consortium: Phase 2 data release and analysis of R9.0 chemistry [*F1000, in submission*]
 
 ## Installation
 
