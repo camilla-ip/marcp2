@@ -9,7 +9,7 @@ Jain M, Tyson JR, Loose M, Ip CLC, Eccles DA, O\'Grady J, Malla S, Leggett RM, W
 Download a copy of this repository:
 
 ```
-cd /PATH/TO/YOUR/SCRIPTS
+cd /PATH/TO/YOUR/THIRD/PARTY/SOFTWARE/DIR
 git clone git@github.com:camilla-ip/marcp2.git
 ```
 
