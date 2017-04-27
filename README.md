@@ -22,4 +22,8 @@ The study was an analysis of 5 experiments:
 
 The Revision1/README.md file describes the third-party software required, how to test the scripts on a tiny sub-sample of the data, how to download the raw experimental data and run the analysis scripts.
 
-Contact camilla.ip@well.ox.ac.uk for more information or comment/bug reports.
+## Support
+
+Please contact either of the following for support, comments or bug reports:
+- Camilla Ip (camilla.ip@well.ox.ac.uk), or
+- Miten Jain (miten@soe.ucsc.edu)
