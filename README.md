@@ -13,7 +13,7 @@ cd /PATH/TO/YOUR/SCRIPTS
 git clone git@github.com:camilla-ip/marcp2.git
 ```
 
-## Revision 1 analysis
+## Revision 1
 
 The study was an analysis of 5 experiments:
 - 1x 2D library run on R7.4 chemistry (data from the MARC Phase 1 study)
