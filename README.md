@@ -6,14 +6,12 @@ Jain M, Tyson JR, Loose M, Ip CLC, Eccles DA, O\'Grady J, Malla S, Leggett RM, W
 
 ## Installation
 
-Download this source hierarchy:
+Download a copy of this repository:
 
 ```
 cd /PATH/TO/YOUR/SCRIPTS
 git clone git@github.com:camilla-ip/marcp2.git
 ```
-
-Then follow instructions in the Revision1 sub-directory README file.
 
 ## Revision 1 analysis
 
@@ -22,8 +20,6 @@ The study was an analysis of 5 experiments:
 - 2x 2D libraries run on R9.0 chemistry (new data produced for this study)
 - 2x 1D libraries run on R9.0 chemistry (new data produced this study)
 
-To replicate the MARC Phase 2 Revision 1 analysis, please follow the instructions in /PATH/TO/YOUR/SCRIPTS/Revision1/README.md
-
-It describes the third-party software required, how to test the scripts on a tiny sub-sample of the data, how to download the raw experimental data and run the analysis scripts.
+The Revision1/README.md file describes the third-party software required, how to test the scripts on a tiny sub-sample of the data, how to download the raw experimental data and run the analysis scripts.
 
 Contact camilla.ip@well.ox.ac.uk for more information or comment/bug reports.
