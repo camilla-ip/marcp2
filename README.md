@@ -13,7 +13,7 @@ Download this source hierarchy:
 
 Then follow instructions in the Revision1 sub-directory README file.
 
-## Revision 1
+## Revision 1 analysis
 
 The study was an analysis of 5 experiments:
 - 1x 2D library run on R7.4 chemistry (data from the MARC Phase 1 study)
