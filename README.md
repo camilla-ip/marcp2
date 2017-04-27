@@ -1,4 +1,4 @@
-# MARC Phase 2 analysis
+# MARC Phase 2 analysis scripts
 
 This repository contains the scripts required to re-create the MARC Phase 2 analyses described in:
 
@@ -6,11 +6,9 @@ Jain M, Tyson JR, Loose M, Ip CLC, Eccles DA, O\'Grady J, Malla S, Leggett RM, W
 
 ## Revision 1
 
-The Revision1 directory contains detailed instructions for downloading the raw data, software pre-requisites, setting up an analysis directory and running the scripts.
-
-The study compares 5 experiments:
+The study was an analysis of 5 experiments:
 - 1x 2D library run on R7.4 chemistry (data from the MARC Phase 1 study)
-- 2x 2D libraries run on R9.0 chemistry (new data in this study)
-- 2x 1D libraries run on R9.0 chemistry (new data in this study)
+- 2x 2D libraries run on R9.0 chemistry (new data produced for this study)
+- 2x 1D libraries run on R9.0 chemistry (new data produced this study)
 
-The directory also contains a reduced data set for testing the scripts work.
+This sub-directory contains detailed instructions for downloading the raw data, software pre-requisites, setting up an analysis directory and running the scripts. It also includes a tiny sub-sample of the data to test the scripts are working.
