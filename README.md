@@ -20,7 +20,7 @@ The study was an analysis of 5 experiments:
 - 2x 2D libraries run on R9.0 chemistry (new data produced for this study)
 - 2x 1D libraries run on R9.0 chemistry (new data produced this study)
 
-The Revision1/README.md file describes the third-party software required, and how to test the scripts on a tiny sub-sample of the data, download the raw experimental data and run the analysis scripts.
+The scripts/Revision1/README.md file describes the third-party software required, and how to test the scripts on a tiny sub-sample of the data, download the raw experimental data and run the analysis scripts.
 
 ## Contact
 
