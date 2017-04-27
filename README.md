@@ -24,6 +24,6 @@ The scripts/Revision1/README.md file describes the third-party software required
 
 ## Contact
 
-For support, comments or bug reports, please contact:
+For support, comments or bug reports:
 - Camilla Ip (camilla.ip@well.ox.ac.uk)
 - Miten Jain (miten@soe.ucsc.edu)
