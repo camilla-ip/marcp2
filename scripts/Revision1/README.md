@@ -3,20 +3,14 @@
 The following instructions describe how to re-generate the analysis
 presented in Revision 1 of the MARC Phase 2 study.
 
-## Assumptions
+## System requirements
 
-The instructions assume you are using a Linux system with the BASH shell environment.
+- System: Linux with Mac OSX
+- Environment: BASH
+- Disk: XXXX TB for raw data, XXXX TB for analysis
+- CPU: Multi-core server or a cluster with Sun Grid Engine (SGE) scheduling
 
-## Step 1.  Download MARC Phase 2 analysis scripts (if required)
-
-```
-cd /PATH/TO/THIRD/PARTY/SOFTWARE
-git clone git@github.com:camilla-ip/marcp2.git
-```
-
-You should now have a subdirectory called marcp2.
-
-## Step 2.  Download third-party bioinformatics software.
+## Step  1 : Download third-party bioinformatics software.
 
 These packages (with specified versions (or higher) need to be in your PATH environment variable:
 - bwa 0.7.12-r1039
@@ -33,28 +27,17 @@ R packages:
 Python packages:
 - XXXX
 
-### Disk storage requirements
+## Step  2 : Testing the scripts on a tiny sub-sample of the data
 
-- XXXX TB for raw data
-- XXXX TB for analysis output files
+## Step  3 : Download the raw experimental data
 
-### CPU requirements
+## Step  4 : Run the analysis
 
-- The scripts will run on a multi-core server or a cluster with
-Sun Grid Engine (SGE) scheduling.
-
-### Environment
-- The scripts will run under Linux or Mac OS with a bash environment.
-- If you have access to an SGE cluster, the scripts must be executed on an SGE submit node.
-
-## Running the analysis
-
-### Step 1 : Download the raw data
-### Step 2 : Set up reference sequences
-### Step 3 : 
-### Step 4 : 
-### Step 5 : 
-### Step 6 : 
+### Step 4.1 : Set up reference sequences
+### Step 4.2 : 
+### Step 4.3 : 
+### Step 4.4 : 
+### Step 4.5 : 
 ### Step 7 : 
 ### Step 8 : 
 ### Step 9 : 
