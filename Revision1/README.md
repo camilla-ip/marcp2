@@ -12,7 +12,7 @@ presented in Revision 1 of the MARC Phase 2 study.
 
 ## Quick start
 
-**Step  1 : Download third-party bioinformatics software**
+*1. Download third-party bioinformatics software*
 
 These packages (with specified versions (or higher) need to be in your PATH environment variable:
 - bwa 0.7.12-r1039
@@ -28,14 +28,15 @@ R packages:
 Python packages:
 - XXXX
 
-**Step 2 : Download the raw experimental data**
+*2. Download the raw experimental data*
 
 XXXX
 
-**Step 3 : Set up references and configure scripts**
+*3. Set up references and configure scripts*
 
-**Step 4 : Run the analysis**
+*4. Run the analysis*
 
+XXXX
 
 ## Analysis output
 
