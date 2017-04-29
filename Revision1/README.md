@@ -32,25 +32,20 @@ __2. Download the raw experimental data__
 
 Download the raw FAST5 data files for each experiment from the European Nucleotide Archive (ENA):
 ```
-- P1b-Lab2-R2-2D : URL
-- P2-Lab6-R1-2D : URL
-- P2-Lab7-R1-2D : URL
-- P2-Lab6-R1-1D : URL
-- P2-Lab7-R1-1D : URL
+* P1b-Lab2-R2-2D : URL
+* P2-Lab6-R1-2D : URL
+* P2-Lab7-R1-2D : URL
+* P2-Lab6-R1-1D : URL
+* P2-Lab7-R1-1D : URL
 ```
 
-Rename and move the data until the file hierarchy is:
-```
-/PATH/TO/DATA/EXPTID/reads/downloads/[fail|pass]/*.fast5
-```
+Rename and move the data until the file hierarchy is: ```
+/PATH/TO/DATA/EXPTID/reads/downloads/[fail|pass]/*.fast5 ```
 
 __3. Set up references and configure scripts__
 
-Set up an environment variable for the analysis output directory:
-```
-export MARCP2=/PATH/TO/MARC/PHASE2/ANALYSIS/OUTPUT/DIR
-```
-
+Set up an environment variable for the analysis output directory: ```
+export MARCP2=/PATH/TO/MARC/PHASE2/ANALYSIS/OUTPUT/DIR ```
 
 __4. Run the analysis__
 
