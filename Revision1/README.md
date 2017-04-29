@@ -44,19 +44,41 @@ Unzip, rename and/or move the files around until the file hierarchy has structur
 /PATH/TO/DATA/EXPTID/reads/downloads/[fail|pass]/*.fast5
 ```
 
-__3. Set up references and configure scripts__
+__3. Set up config and additional data files for analysis__
 
-Set up an environment variable for the analysis output directory:
+* Set up some environment variables to simplify the explanation below:
 ```
-export MARCP2=/PATH/TO/MARC/PHASE2/ANALYSIS/OUTPUT/DIR
+export MARCP2=/PATH/TO/MARCP2/DIR/
+export MARCOPORO=/PATH/TO/MARCOPORO/v1.0/DIR/
+export PHASE2=/PATH/TO/MARC/PHASE2/ANALYSIS/OUTPUT/DIR/
 ```
 
+* Copy config file templates to a new local 01-config sub-directory and edit files as appropriate. The reference files for the analysis can refer to the references provided in the $MARCP2/Revision1 directory, which are a concatenation of the E. coli K-12 MG1665 strain and the entire lambda phage genome from Oxford Nanopore Technologies (which differs by a few nucleotides from XXXX in NCBI RefSeq).
 
+```
+cd $PHASE2/
+mkdir 01-config
+cp $MARCP2/Revision1/experiments_template.txt 01-config/experiments.txt
+cp $MARCOPORO/config_example.txt 01-config/marcoporo_config.txt
+```
+
+Your analysis output directory should now contain:
+```
+$PHASE2/01-config
+    /experiments.txt
+    /marcoporo_config.txt
+```
 
 __4. Run the analysis__
 
-XXXX
+```
+${MARCP2}/run_marcp2_analysis.sh \
+  ${PHASE2}/01-config/experiments.txt \
+  ${PHASE2}/01-config/marcoporo-config.txt \
+  ${PHASE2}
+```
 
 ## Analysis output
 
 XXXX
+
