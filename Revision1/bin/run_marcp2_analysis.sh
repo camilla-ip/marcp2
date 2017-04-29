@@ -14,13 +14,34 @@ outdir=${2}
 
 # ===== FUNCTIONS =====
 
+function PrintMsg {
+    printf "`date +\"%Y-%m-%d %H:%M:%S\"` : ${*}\n"
+}
 
+function CheckRawDirStructure {
+  # Check that each of the experimental raw data directories has the correct
+  # sub-dir structure. Exit on error.
+    exptfile=${1}
+
+    founderror=0
+    tail -n +2 ${exptfile} | while read exptid phase lab replicate libtype dirpath instanceN ; do
+        if [ ! -d ${dirpath} ] ; then PrintMsg "Erro : Missing dir ${dirpath}" ; founderor=1 ; fi
+        if [ ! -d ${dirpath}/reads ] ; then PrintMsg "Erro : Missing dir ${dirpath}/reads" ; founderor=1 ; fi
+        if [ ! -d ${dirpath}/reads/downloads ] ; then PrintMsg "Erro : Missing dir ${dirpath}/reads/downloads" ; founderor=1 ; fi
+        if [ ! -d ${dirpath}/reads/downloads/fail ] ; then PrintMsg "Erro : Missing dir ${dirpath}/reads/downloads/fail" ; founderor=1 ; fi
+        if [ ! -d ${dirpath}/reads/downloads/pass ] ; then PrintMsg "Erro : Missing dir ${dirpath}/reads/downloads/pass" ; founderor=1 ; fi
+    done
+
+    if [ ${founderror} -eq 1 ] ; then
+       exit 1
+    fi
+    PrintMsg "Info : Raw experiment dir hierarchy ok"
+}
 
 # ===== MAIN =====
 
-printf "`date +\"%Y-%m-%d %H:%M:%S\"` : run_marcp2_analysis.sh\n"
-printf "`date +\"%Y-%m-%d %H:%M:%S\"` : Started\n"
+PrintMsg "Info : run_marcp2_analysis.sh"
+PrintMsg "Info : Started"
+CheckRawDirStructure ${exptfile}
+PrintMsg "Info : Finished"
 
-
-
-printf "`date +\"%Y-%m-%d %H:%M:%S\"` : Finished\n"
