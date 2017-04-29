@@ -12,9 +12,9 @@ presented in Revision 1 of the MARC Phase 2 study.
 
 ## Quick start
 
-__1. Download third-party bioinformatics software__
+__1. Download third-party software__
 
-These packages (with specified versions (or higher) need to be in your PATH environment variable:
+Bioinformatics software:
 - bwa 0.7.12-r1039
 - marcoporo 1.0
 - marginAlign XXXX
