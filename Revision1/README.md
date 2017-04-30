@@ -59,7 +59,8 @@ cp $MARCP2/Revision1/experiments_template.txt 01-config/experiments.txt
 cp $MARCOPORO/config_example.txt 01-config/marcoporo_config.txt
 ```
 
-Set up the E. coli and lambda phage references. The FASTA files are copied from the scripts release directory and database indices created locally. The references.fasta file contains a concatenation of the E. coli K-12 MG1665 strain and the entire lambda phage genome from Oxford Nanopore Technologies (which differs by a few nucleotides from XXXX in NCBI RefSeq). The target.fasta file contains only the E. coli genome.
+Set up the E. coli and lambda phage references. The FASTA files are copied from the scripts release directory and database indices created locally. The references.fasta file contains a concatenation of the E. coli K-12 MG1665 strain (NC_000913.3) and the entire lambda phage genome from Oxford Nanopore Technologies. The target.fasta file contains only the E. coli genome. The ONT lambda reference differs at four sites from NC_001416.1 in NCBI RefSeq (37589:C->T, 37742:C->T, 43082:G->A, 45352:G->A).
+
 ```
 cd ${PHASE2}
 zcat $MARCP2/Revision1/references.fasta.gz > 01-config/references.fasta
