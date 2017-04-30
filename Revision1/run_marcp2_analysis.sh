@@ -2,15 +2,18 @@
 
 # ===== ARGUMENTS =====
 
-if [ $# -lt 2 ] ; then
-    printf "Usage: run_marcp2_analysis.sh exptfile outdir\n"
+if [ $# -lt 3 ] ; then
+    printf "Usage: run_marcp2_analysis.sh exptfile marcoporoconfigfile outdir\n"
+    printf "\n"
     printf "       Given an exptfile containing experiment identifiers and raw sequence data paths,\n"
     printf "       perform data pre-processing and output the tables and figures of experimental\n"
     printf "       statistics as seen in the MARC Phase 2 Revision 1 paper.\n"
+    printf "\n"
     exit 1
 fi
 exptfile=${1}
-outdir=${2}
+marcoporoconfigfile=${2}
+outdir=${3}
 
 # ===== FUNCTIONS =====
 

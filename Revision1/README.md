@@ -100,7 +100,7 @@ $PHASE2/01-config
 __4. Run the analysis__
 
 ```
-${MARCP2}/run_marcp2_analysis.sh \
+${MARCP2}/Revision1/run_marcp2_analysis.sh \
   ${PHASE2}/01-config/experiments.txt \
   ${PHASE2}/01-config/marcoporo-config.txt \
   ${PHASE2}
