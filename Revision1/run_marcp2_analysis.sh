@@ -15,6 +15,12 @@ exptfile=${1}
 marcoporoconfigfile=${2}
 outdir=${3}
 
+# ===== CONSTANTS =====
+
+SAMPLESIZE=250
+marcoporo_prog=`cat ${marcoporoconfigfile} | grep "^marcoporo=" | cut -f2 -d'='`
+echo $marcoporo_prog
+
 # ===== FUNCTIONS =====
 
 function PrintMsg {
@@ -45,6 +51,14 @@ function CheckRawDirStructure {
 
 PrintMsg "Info : run_marcp2_analysis.sh"
 PrintMsg "Info : Started"
+
 CheckRawDirStructure ${exptfile}
+
+${marcoporo_prog} exptconstants \
+  -config ${marcoporoconfigfile} \
+  -experiments ${exptfile} \
+  -samplesize ${SAMPLESIZE} \
+  -outdir ${outdir}/02-extract
+
 PrintMsg "Info : Finished"
 
