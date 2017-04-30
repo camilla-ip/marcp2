@@ -70,11 +70,23 @@ bwa index 01-config/references.fasta
 zcat $MARCP2/Revision1/target.fasta.gz > 01-config/target.fasta
 makeblastdb -in=01-config/target.fasta -dbtype=nucl
 bwa index 01-config/target.fasta
+zcat $MARCP2/Revision1/target.fasta.gz > 01-config/control.fasta
+makeblastdb -in=01-config/control.fasta -dbtype=nucl
+bwa index 01-config/control.fasta
 ```
 
 Your analysis output directory should now contain:
 ```
 $PHASE2/01-config
+    /control.fasta
+    /control.fasta.amb
+    /control.fasta.ann
+    /control.fasta.bwt
+    /control.fasta.nhr
+    /control.fasta.nin
+    /control.fasta.nsq
+    /control.fasta.pac
+    /control.fasta.sa
     /experiments.txt
     /marcoporo_config.txt
     /references.fasta
