@@ -10,9 +10,7 @@ presented in Revision 1 of the MARC Phase 2 study.
 - Disk: XXXX TB for raw data, XXXX TB for analysis
 - CPU: Multi-core server or a cluster with Sun Grid Engine (SGE) scheduling
 
-## Quick start
-
-__1. Download third-party software__
+## 1. Download third-party software
 
 Bioinformatics software:
 - bwa 0.7.12-r1039
@@ -28,7 +26,7 @@ R packages:
 Python packages:
 - XXXX
 
-__2. Download the raw experimental data__
+## 2. Download the raw experimental data
 
 Use ncftp (or similar) to download the raw FAST5 data for each experiment:
 ```
@@ -44,7 +42,7 @@ Unzip, rename and/or move the files around until the file hierarchy has structur
 /PATH/TO/DATA/EXPTID/reads/downloads/[fail|pass]/*.fast5
 ```
 
-__3. Set up config and additional data files for analysis__
+## 3. Set up config and additional data files for analysis
 
 Set up some environment variables to simplify the explanation below:
 ```
@@ -109,7 +107,7 @@ $PHASE2/01-config
     /target.fasta.sa
 ```
 
-__4. Run the analysis__
+## 4. Run the analysis
 
 ```
 ${MARCP2}/Revision1/run_marcp2_analysis.sh \
