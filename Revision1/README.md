@@ -46,16 +46,14 @@ Unzip, rename and/or move the files around until the file hierarchy has structur
 
 __3. Set up config and additional data files for analysis__
 
-* Set up some environment variables to simplify the explanation below:
+Set up some environment variables to simplify the explanation below:
 ```
 export MARCP2=/PATH/TO/MARCP2/DIR/
 export MARCOPORO=/PATH/TO/MARCOPORO/v1.0/DIR/
 export PHASE2=/PATH/TO/MARC/PHASE2/ANALYSIS/OUTPUT/DIR/
 ```
 
-* Copy config file templates to a new local 01-config sub-directory and edit files as appropriate.
-
-
+Copy config file templates to a new local 01-config sub-directory and edit files as appropriate.
 ```
 cd $PHASE2/
 mkdir 01-config
@@ -63,8 +61,7 @@ cp $MARCP2/Revision1/experiments_template.txt 01-config/experiments.txt
 cp $MARCOPORO/config_example.txt 01-config/marcoporo_config.txt
 ```
 
-* Set up the E. coli and lambda phage references. The FASTA files are copied from the scripts release directory and database indices created locally. The references.fasta file contains a concatenation of the E. coli K-12 MG1665 strain and the entire lambda phage genome from Oxford Nanopore Technologies (which differs by a few nucleotides from XXXX in NCBI RefSeq). The target.fasta file contains only the E. coli genome.
-
+Set up the E. coli and lambda phage references. The FASTA files are copied from the scripts release directory and database indices created locally. The references.fasta file contains a concatenation of the E. coli K-12 MG1665 strain and the entire lambda phage genome from Oxford Nanopore Technologies (which differs by a few nucleotides from XXXX in NCBI RefSeq). The target.fasta file contains only the E. coli genome.
 ```
 cd ${PHASE2}
 zcat $MARCP2/Revision1/references.fasta.gz > 01-config/references.fasta
