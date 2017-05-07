@@ -20,6 +20,11 @@ outdir=${4}
 
 SAMPLESIZE=250
 marcoporo_prog=`cat ${marcoporoconfigfile} | grep "^marcoporo=" | cut -f2 -d'='`
+bwa_prog=`cat ${marcoporoconfigfile} | grep "^bwa=" | cut -f2 -d'='`
+samtools_prog=`cat ${marcoporoconfigfile} | grep "^samtools=" | cut -f2 -d'='`
+reffasta=`cat ${marcoporoconfigfile} | grep "^refpath=" | cut -f2 -d'='`
+THREADS=1
+OVERWRITE=False
 
 # ===== FUNCTIONS =====
 
@@ -54,7 +59,7 @@ function ExtractExptConstants {
       -experiments ${exptfile} \
       -samplesize ${SAMPLESIZE} \
       -outdir ${outdir}/02-exptconstants \
-      -overwrite False"
+      -overwrite ${OVERWRITE}"
     cmd=`echo ${cmd} | sed 's/  */ /g'`
     #PrintMsg "Info : ExtractExptConstants : $cmd"
     $cmd
@@ -64,6 +69,7 @@ function ExtractExptConstants {
 }
 
 function ExtractBasecalls {
+  # Need to implement overwrite feature
     PrintMsg "Info : ExtractBasecalls : Started"
     tail -n +2 ${exptfile} | while read exptid phase lab replicate libtype dirpath instanceN ; do
         PrintMsg "Info : ExtractBasecalls : Processing ${exptid}"
@@ -81,7 +87,6 @@ function ExtractBasecalls {
           -pairs False \
           -stats True"
         cmd=`echo ${cmd} | sed 's/  */ /g'`
-        #PrintMsg "Info : ExtractBasecalls : $cmd"
         $cmd
         retval=`echo $?`
         if [[ ${retval} -ne 0 ]]; then exit ${retval} ; fi
@@ -89,14 +94,85 @@ function ExtractBasecalls {
     PrintMsg "Info : ExtractBasecalls : Finished"
 }
 
+ # /well/bsg/microbial/soft/rescomp/src/bwa/v0.7.5a-r405/bwa mem -x ont2d -M -t 1 /well/bsg/microbial/marc/phase2/Revision1/testing/01-config/references.fasta ./03-extract/TP2-Lab7-R1-2D_2D_pass.fastq | samtools view -b -S - | samtools sort > 04-bwamem/TP2-Lab7-R1-2D_2D_pass.bam
+
+function MapReadsWithBwaMem {
+  # Map reads from each non-empty FASTQ file in the extract dir
+    PrintMsg "Info : MapReadsWithBwaMem : Started"
+    if [ ! -d ${outdir}/04-bwamem ] ; then mkdir -p ${outdir}/04-bwamem ; fi
+    ls ${outdir}/03-extract/*.fastq | while read fastqpath ; do
+        if [ -s ${fastqpath} ] ; then
+            outfilestem=`basename ${fastqpath} | sed "s,.fastq,,g"`
+            outbampathstem=${outdir}/04-bwamem/${outfilestem}
+            outsampath=${outdir}/04-bwamem/${outfilestem}.sam
+            outbampath=${outdir}/04-bwamem/${outfilestem}.bam
+            if [[ ${OVERWRITE} = "True" || ! -s ${outbampath} ]] ; then
+                cmd="${bwa_prog} mem -x ont2d -M -t ${THREADS} ${reffasta} ${fastqpath} \
+                  | ${samtools_prog} view -b -S - \
+                  | ${samtools_prog} sort - ${outbampathstem} \
+                  2> ${outbampathstem}.err"
+                cmd=`echo ${cmd} | sed 's/  */ /g'`
+                PrintMsg "Info : MapReadsWithBwamem : Running ${cmd}"
+                (${bwa_prog} mem -x ont2d -M -t ${THREADS} ${reffasta} ${fastqpath} \
+                  | ${samtools_prog} view -b -S - \
+                  | ${samtools_prog} sort - ${outbampathstem}) 2> ${outbampathstem}.err
+                retval=`echo $?`
+                if [[ ${retval} -ne 0 ]]; then
+                    PrintMsg "Warn : MapReadsWithBwamem : Cmd with return code ${retval} : ${cmd}"
+                    exit ${retval}
+                fi
+                cmd="${samtools_prog} index ${outbampath}"
+                PrintMsg "Info : MapReadsWithBwamem : Running ${cmd}"
+                ${samtools_prog} index ${outbampath}
+                retval=`echo $?`
+                if [[ ${retval} -ne 0 ]]; then
+                    PrintMsg "Warn : MapReadsWithBwamem : Cmd with return code ${retval} : ${cmd}"
+                    exit ${retval}
+                fi
+            else
+                PrintMsg "Info : MapReadsWithBwamem : Output already exists ${outbampath}"
+            fi
+        else
+            PrintMsg "Info : MapReadsWithBwamem : Ignoring empty file ${fastqpath}"
+        fi
+    done
+    PrintMsg "Info : MapReadsWithBwaMem : Finished"
+}
+
+function AggregateStats {
+    PrintMsg "Info : AggregateStats : Started"
+    tail -n +2 ${exptfile} | while read exptid phase lab replicate libtype dirpath instanceN ; do
+        PrintMsg "Info : AggregateStats : Processing ${exptid}"
+        cmd="${marcoporo_prog} aggregateone \
+          -bin ${bindir} \
+          -profile None \
+          -config ${marcoporoconfigfile} \
+          -exptid ${exptid} \
+          -extractdir ${outdir}/data/03-extract \
+          -bwamemdir ${outdir}/04-bwamem \
+          -maxrunlen 48 \
+          -timebucket 0.25 \
+          -outdir ${outdir}/05-aggregate"
+        cmd=`echo ${cmd} | sed 's/  */ /g'`
+        $cmd
+        retval=`echo $?`
+        if [[ ${retval} -ne 0 ]]; then exit ${retval} ; fi
+    done
+    PrintMsg "Info : AggregateStats : Finished"
+}
+
 # ===== MAIN =====
 
 PrintMsg "Info : run_marcp2_analysis.sh"
 PrintMsg "Info : Started"
 
-CheckRawDirStructure ${exptfile}
-ExtractExptConstants
-ExtractBasecalls
+#CheckRawDirStructure ${exptfile}
+#ExtractExptConstants
+#ExtractBasecalls
+
+MapReadsWithBwaMem
+
+#AggregateStats
 
 PrintMsg "Info : Finished"
 
