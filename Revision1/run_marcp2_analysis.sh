@@ -18,23 +18,33 @@ outdir=${4}
 
 # ===== CONSTANTS =====
 
-SAMPLESIZE=250
 marcoporo_prog=`cat ${marcoporoconfigfile} | grep "^marcoporo=" | cut -f2 -d'='`
 bwa_prog=`cat ${marcoporoconfigfile} | grep "^bwa=" | cut -f2 -d'='`
+poremapstats_prog=`cat ${marcoporoconfigfile} | grep "^poremapstats=" | cut -f2 -d'='`
 samtools_prog=`cat ${marcoporoconfigfile} | grep "^samtools=" | cut -f2 -d'='`
 reffasta=`cat ${marcoporoconfigfile} | grep "^refpath=" | cut -f2 -d'='`
+targetfasta=`cat ${marcoporoconfigfile} | grep "^targetpath=" | cut -f2 -d'='`
+controlfasta=`cat ${marcoporoconfigfile} | grep "^controlpath=" | cut -f2 -d'='`
+
+SAMPLESIZE=250
 THREADS=1
 OVERWRITE=False
 MAXRUNLEN=48
 TIMEBUCKET=0.25
+FASTALINEWIDTH=100
+
+readtypeL=(1T 1C 2D)
+readclassL=(pass fail)
 
 # ===== FUNCTIONS =====
 
-function PrintMsg {
+function PrintMsg
+{
     printf "run_marcp2_analysis.sh `date +\"%Y-%m-%d %H:%M:%S\"` : ${*}\n"
 }
 
-function CheckRawDirStructure {
+function CheckRawDirStructure
+{
   # Check that each of the experimental raw data directories has the correct
   # sub-dir structure. Exit on error.
     PrintMsg "Info : CheckRawDirStructure : Started"
@@ -51,7 +61,8 @@ function CheckRawDirStructure {
     PrintMsg "Info : CheckRawDirStructure : Finished"
 }
 
-function ExtractExptConstants {
+function ExtractExptConstants
+{
     PrintMsg "Info : ExtractExptConstants : Started"
     outpath1=${odir}/exptconstants.txt
     outpath2=${odir}/exptconstantfields.txt
@@ -70,7 +81,8 @@ function ExtractExptConstants {
     PrintMsg "Info : ExtractExptConstants : Finished"
 }
 
-function ExtractBasecalls {
+function ExtractBasecalls
+{
   # Need to implement overwrite feature
     PrintMsg "Info : ExtractBasecalls : Started"
     tail -n +2 ${exptfile} | while read exptid phase lab replicate libtype dirpath instanceN ; do
@@ -98,7 +110,8 @@ function ExtractBasecalls {
 
  # /well/bsg/microbial/soft/rescomp/src/bwa/v0.7.5a-r405/bwa mem -x ont2d -M -t 1 /well/bsg/microbial/marc/phase2/Revision1/testing/01-config/references.fasta ./03-extract/TP2-Lab7-R1-2D_2D_pass.fastq | samtools view -b -S - | samtools sort > 04-bwamem/TP2-Lab7-R1-2D_2D_pass.bam
 
-function MapReadsWithBwaMem {
+function MapReadsWithBwaMem
+{
   # Map reads from each non-empty FASTQ file in the extract dir
     PrintMsg "Info : MapReadsWithBwaMem : Started"
     if [ ! -d ${outdir}/04-bwamem ] ; then mkdir -p ${outdir}/04-bwamem ; fi
@@ -109,6 +122,7 @@ function MapReadsWithBwaMem {
             outsampath=${outdir}/04-bwamem/${outfilestem}.sam
             outbampath=${outdir}/04-bwamem/${outfilestem}.bam
             if [[ ${OVERWRITE} = "True" || ! -s ${outbampath} ]] ; then
+              # Map reads with bwa mem, save as sorted BAM
                 cmd="${bwa_prog} mem -x ont2d -M -t ${THREADS} ${reffasta} ${fastqpath} \
                   | ${samtools_prog} view -b -S - \
                   | ${samtools_prog} sort - ${outbampathstem} \
@@ -123,6 +137,7 @@ function MapReadsWithBwaMem {
                     PrintMsg "Warn : MapReadsWithBwamem : Cmd with return code ${retval} : ${cmd}"
                     exit ${retval}
                 fi
+              # Create BAM index file
                 cmd="${samtools_prog} index ${outbampath}"
                 PrintMsg "Info : MapReadsWithBwamem : Running ${cmd}"
                 ${samtools_prog} index ${outbampath}
@@ -141,7 +156,91 @@ function MapReadsWithBwaMem {
     PrintMsg "Info : MapReadsWithBwaMem : Finished"
 }
 
-function AggregateStats {
+function RunPoremapstats
+{
+    PrintMsg "Info : RunPoremapstats : Started"
+
+    tail -n +2 ${exptfile} | while read exptid phase lab replicate libtype dirpath instanceN ; do
+        for readtype in ${readtypeL[@]} ; do
+            for readclass in ${readclassL[@]} ; do
+                outprefix=${exptid}_${readtype}_${readclass}
+                bampath=${outdir}/04-bwamem/${outprefix}.bam
+                if [ ! -s ${bampath} ] ; then
+                    continue
+                fi
+              # Only run if output files missing or overwrite is True XXXX
+                initstatspath=${outdir}/04-bwamem/${outprefix}_initstats.txt
+                readstatspath=${outdir}/04-bwamem/${outprefix}_readstats.txt
+                runstatspath=${outdir}/04-bwamem/${outprefix}_runstats.txt
+                if [[ ${overwrite} = "True" || (-s ${initstatspath} && -s ${readstatspath} && ${runstatspath}) ]] ; then
+                    PrintMsg "Info : RunPoremapstats : Output already exists ${outprefix}"
+                    continue
+                fi 
+              # Run poremapstats
+                logpath=${outdir}/04-bwamem/${outprefix}_poremapstats.log
+                if [ ${readtype} = "1T" ] ; then
+                    readtypelongfmt="temp"
+                elif [ ${readtype} = "1C" ] ; then
+                    readtypelongfmt="comp"
+                elif [ ${readtype} = "2D" ] ; then
+                    readtypelongfmt="2d"
+                else
+                    readtypelongfmt="unknown"
+                fi
+                cmd="${poremapstats_prog} \
+                  --bindir ${bindir} \
+                  --profilepath None \
+                  --runid ${exptid} \
+                  --readtype ${readtypelongfmt} \
+                  --readclass ${readclass} \
+                  --datatype minion \
+                  --mapprog bwa \
+                  --mapparams \"-x ont2d -M\" \
+                  --alignclasspath None \
+                  --readsbam ${bampath} \
+                  --targetrefpath ${targetfasta} \
+                  --controlrefpath ${controlfasta} \
+                  --outdir ${outdir}/04-bwamem \
+                  --outprefix ${outprefix} \
+                  --savealignments False \
+                  --fastalinewidth ${FASTALINEWIDTH} \
+                  --overwrite ${OVERWRITE} \
+                  &> ${logpath}"
+                cmd=`echo ${cmd} | sed 's/  */ /g'`
+                PrintMsg "Info : RunPoremapstats : Running ${cmd}"
+                ${poremapstats_prog} \
+                  --bindir ${bindir} \
+                  --profilepath None \
+                  --runid ${exptid} \
+                  --readtype ${readtypelongfmt} \
+                  --readclass ${readclass} \
+                  --datatype minion \
+                  --mapprog bwa \
+                  --mapparams "-x ont2d -M" \
+                  --alignclasspath None \
+                  --readsbam ${bampath} \
+                  --targetrefpath ${targetfasta} \
+                  --controlrefpath ${controlfasta} \
+                  --outdir ${outdir}/04-bwamem \
+                  --outprefix ${outprefix} \
+                  --savealignments False \
+                  --fastalinewidth ${FASTALINEWIDTH} \
+                  --overwrite ${OVERWRITE} \
+                  &> ${logpath}
+                retval=`echo $?`
+                if [[ ${retval} -ne 0 ]]; then
+                    PrintMsg "Warn : RunPoremapstats : Cmd with return code ${retval} : ${cmd}"
+                    exit ${retval}
+                fi
+            done
+        done
+    done
+
+    PrintMsg "Info : RunPoremapstats : Finished"
+}
+
+function AggregateStats
+{
     PrintMsg "Info : AggregateStats : Started"
     tail -n +2 ${exptfile} | while read exptid phase lab replicate libtype dirpath instanceN ; do
         PrintMsg "Info : AggregateStats : Processing ${exptid}"
@@ -168,11 +267,11 @@ function AggregateStats {
 PrintMsg "Info : run_marcp2_analysis.sh"
 PrintMsg "Info : Started"
 
-#CheckRawDirStructure ${exptfile}
-#ExtractExptConstants
-#ExtractBasecalls
-#MapReadsWithBwaMem
-
+CheckRawDirStructure ${exptfile}
+ExtractExptConstants
+ExtractBasecalls
+MapReadsWithBwaMem
+RunPoremapstats
 AggregateStats
 
 PrintMsg "Info : Finished"
