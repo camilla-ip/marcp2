@@ -25,6 +25,8 @@ samtools_prog=`cat ${marcoporoconfigfile} | grep "^samtools=" | cut -f2 -d'='`
 reffasta=`cat ${marcoporoconfigfile} | grep "^refpath=" | cut -f2 -d'='`
 THREADS=1
 OVERWRITE=False
+MAXRUNLEN=48
+TIMEBUCKET=0.25
 
 # ===== FUNCTIONS =====
 
@@ -148,10 +150,10 @@ function AggregateStats {
           -profile None \
           -config ${marcoporoconfigfile} \
           -exptid ${exptid} \
-          -extractdir ${outdir}/data/03-extract \
+          -extractdir ${outdir}/03-extract \
           -bwamemdir ${outdir}/04-bwamem \
-          -maxrunlen 48 \
-          -timebucket 0.25 \
+          -maxrunlen ${MAXRUNLEN} \
+          -timebucket ${TIMEBUCKET} \
           -outdir ${outdir}/05-aggregate"
         cmd=`echo ${cmd} | sed 's/  */ /g'`
         $cmd
@@ -169,10 +171,9 @@ PrintMsg "Info : Started"
 #CheckRawDirStructure ${exptfile}
 #ExtractExptConstants
 #ExtractBasecalls
+#MapReadsWithBwaMem
 
-MapReadsWithBwaMem
-
-#AggregateStats
+AggregateStats
 
 PrintMsg "Info : Finished"
 
