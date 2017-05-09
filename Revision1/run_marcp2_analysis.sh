@@ -267,11 +267,11 @@ function AggregateStats
 PrintMsg "Info : run_marcp2_analysis.sh"
 PrintMsg "Info : Started"
 
-CheckRawDirStructure ${exptfile}
-ExtractExptConstants
-ExtractBasecalls
-MapReadsWithBwaMem
-RunPoremapstats
+#CheckRawDirStructure ${exptfile}
+#ExtractExptConstants
+#ExtractBasecalls
+#MapReadsWithBwaMem
+#RunPoremapstats
 AggregateStats
 
 PrintMsg "Info : Finished"
