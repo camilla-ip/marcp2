@@ -262,17 +262,40 @@ function AggregateStats
     PrintMsg "Info : AggregateStats : Finished"
 }
 
+function NanookReports
+{
+    PrintMsg "Info : NanookReports : Started"
+    if [ ! -d ${outdir}/07-nanookreports ] ; then mkdir -p ${outdir}/07-nanook ; fi
+    cmd="${marcoporo_prog} nanookreports \
+        -bin ${bindir} \
+        -profile None \
+        -config ${marcoporoconfigfile} \
+        -experiments ${exptfile} \
+        -threads ${THREADS} \
+        -extractdir ${outdir}/03-extract \
+        -outdir ${outdir}/07-nanookreports \
+        -overwrite ${OVERWRITE}"
+    cmd=`echo ${cmd} | sed 's/  */ /g'`
+    echo ${cmd}
+    $cmd
+    retval=`echo $?`
+    if [[ ${retval} -ne 0 ]]; then exit ${retval} ; fi
+    PrintMsg "Info : NanookReports : Finished"
+}
+
 # ===== MAIN =====
 
 PrintMsg "Info : run_marcp2_analysis.sh"
 PrintMsg "Info : Started"
 
-#CheckRawDirStructure ${exptfile}
-#ExtractExptConstants
-#ExtractBasecalls
-#MapReadsWithBwaMem
-#RunPoremapstats
+CheckRawDirStructure ${exptfile}
+ExtractExptConstants
+ExtractBasecalls
+MapReadsWithBwaMem
+RunPoremapstats
 AggregateStats
+#MarginAlign	# Not implemented yet
+NanookReports
 
 PrintMsg "Info : Finished"
 
