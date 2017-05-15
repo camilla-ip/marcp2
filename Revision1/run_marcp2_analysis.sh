@@ -48,7 +48,6 @@ function CheckRawDirStructure
   # Check that each of the experimental raw data directories has the correct
   # sub-dir structure. Exit on error.
     PrintMsg "Info : CheckRawDirStructure : Started"
-    exptfile=${1}
     founderror=0
     tail -n +2 ${exptfile} | while read exptid phase lab replicate libtype dirpath instanceN ; do
         if [ ! -d ${dirpath} ] ; then PrintMsg "Erro : Missing dir ${dirpath}" ; founderor=1 ; fi
@@ -74,7 +73,6 @@ function ExtractExptConstants
       -outdir ${outdir}/02-exptconstants \
       -overwrite ${OVERWRITE}"
     cmd=`echo ${cmd} | sed 's/  */ /g'`
-    #PrintMsg "Info : ExtractExptConstants : $cmd"
     $cmd
     retval=`echo $?`
     if [[ ${retval} -ne 0 ]]; then exit ${retval} ; fi
@@ -111,152 +109,20 @@ function ExtractBasecalls
 function MapWithBwa
 {
     PrintMsg "Info : MapWithBwa : Started"
-    #tail -n +2 ${exptfile} | while read exptid phase lab replicate libtype dirpath instanceN ; do
-     #   PrintMsg "Info : MapWithBwa : Processing ${exptid}"
-        cmd="${marcoporo_prog} mapwithbwa \
-          -bin ${bindir} \
-          -profile None \
-          -config ${marcoporoconfigfile} \
-          -experiments ${exptfile} \
-          -extractdir ${outdir}/03-extract \
-          -bwamemdir ${outdir}/04-bwamem \
-          -overwrite ${OVERWRITE}"
-        cmd=`echo ${cmd} | sed 's/  */ /g'`
-        echo "Running $cmd"
-        $cmd
-        retval=`echo $?`
-        if [[ ${retval} -ne 0 ]]; then exit ${retval} ; fi
-    #done
+    cmd="${marcoporo_prog} mapwithbwa \
+      -bin ${bindir} \
+      -profile None \
+      -config ${marcoporoconfigfile} \
+      -experiments ${exptfile} \
+      -extractdir ${outdir}/03-extract \
+      -bwamemdir ${outdir}/04-bwamem \
+      -overwrite ${OVERWRITE}"
+    cmd=`echo ${cmd} | sed 's/  */ /g'`
+    echo "Running $cmd"
+    $cmd
+    retval=`echo $?`
+    if [[ ${retval} -ne 0 ]]; then exit ${retval} ; fi
     PrintMsg "Info : MapWithBwa : Finished"
-}
-
-function MapWithBwaMem-Shell
-{
-  # Map reads from each non-empty FASTQ file in the extract dir
-    PrintMsg "Info : MapWithBwaMem : Started"
-    if [ ! -d ${outdir}/04-bwamem ] ; then mkdir -p ${outdir}/04-bwamem ; fi
-    ls ${outdir}/03-extract/*.fastq | while read fastqpath ; do
-        if [ -s ${fastqpath} ] ; then
-            outfilestem=`basename ${fastqpath} | sed "s,.fastq,,g"`
-            outbampathstem=${outdir}/04-bwamem/${outfilestem}
-            outsampath=${outdir}/04-bwamem/${outfilestem}.sam
-            outbampath=${outdir}/04-bwamem/${outfilestem}.bam
-            if [[ ${OVERWRITE} = "True" || ! -s ${outbampath} ]] ; then
-              # Map reads with bwa mem, save as sorted BAM
-                cmd="${bwa_prog} mem -x ont2d -M -t ${THREADS} ${reffasta} ${fastqpath} \
-                  | ${samtools_prog} view -b -S - \
-                  | ${samtools_prog} sort - ${outbampathstem} \
-                  2> ${outbampathstem}.err"
-                cmd=`echo ${cmd} | sed 's/  */ /g'`
-                PrintMsg "Info : MapWithBwamem : Running ${cmd}"
-                (${bwa_prog} mem -x ont2d -M -t ${THREADS} ${reffasta} ${fastqpath} \
-                  | ${samtools_prog} view -b -S - \
-                  | ${samtools_prog} sort - ${outbampathstem}) 2> ${outbampathstem}.err
-                retval=`echo $?`
-                if [[ ${retval} -ne 0 ]]; then
-                    PrintMsg "Warn : MapWithBwamem : Cmd with return code ${retval} : ${cmd}"
-                    exit ${retval}
-                fi
-              # Create BAM index file
-                cmd="${samtools_prog} index ${outbampath}"
-                PrintMsg "Info : MapWithBwamem : Running ${cmd}"
-                ${samtools_prog} index ${outbampath}
-                retval=`echo $?`
-                if [[ ${retval} -ne 0 ]]; then
-                    PrintMsg "Warn : MapWithBwamem : Cmd with return code ${retval} : ${cmd}"
-                    exit ${retval}
-                fi
-            else
-                PrintMsg "Info : MapWithBwamem : Output already exists ${outbampath}"
-            fi
-        else
-            PrintMsg "Info : MapWithBwamem : Ignoring empty file ${fastqpath}"
-        fi
-    done
-    PrintMsg "Info : MapWithBwaMem : Finished"
-}
-
-function RunPoremapstats-Shell
-{
-    PrintMsg "Info : RunPoremapstats : Started"
-
-    tail -n +2 ${exptfile} | while read exptid phase lab replicate libtype dirpath instanceN ; do
-        for readtype in ${readtypeL[@]} ; do
-            for readclass in ${readclassL[@]} ; do
-                outprefix=${exptid}_${readtype}_${readclass}
-                bampath=${outdir}/04-bwamem/${outprefix}.bam
-                if [ ! -s ${bampath} ] ; then
-                    continue
-                fi
-              # Only run if output files missing or overwrite is True XXXX
-                initstatspath=${outdir}/04-bwamem/${outprefix}_initstats.txt
-                readstatspath=${outdir}/04-bwamem/${outprefix}_readstats.txt
-                runstatspath=${outdir}/04-bwamem/${outprefix}_runstats.txt
-                if [[ ${overwrite} = "True" || (-s ${initstatspath} && -s ${readstatspath} && ${runstatspath}) ]] ; then
-                    PrintMsg "Info : RunPoremapstats : Output already exists ${outprefix}"
-                    continue
-                fi 
-              # Run poremapstats
-                logpath=${outdir}/04-bwamem/${outprefix}_poremapstats.log
-                if [ ${readtype} = "1T" ] ; then
-                    readtypelongfmt="temp"
-                elif [ ${readtype} = "1C" ] ; then
-                    readtypelongfmt="comp"
-                elif [ ${readtype} = "2D" ] ; then
-                    readtypelongfmt="2d"
-                else
-                    readtypelongfmt="unknown"
-                fi
-                cmd="${poremapstats_prog} \
-                  --bindir ${bindir} \
-                  --profilepath None \
-                  --runid ${exptid} \
-                  --readtype ${readtypelongfmt} \
-                  --readclass ${readclass} \
-                  --datatype minion \
-                  --mapprog bwa \
-                  --mapparams \"-x ont2d -M\" \
-                  --alignclasspath None \
-                  --readsbam ${bampath} \
-                  --targetrefpath ${targetfasta} \
-                  --controlrefpath ${controlfasta} \
-                  --outdir ${outdir}/04-bwamem \
-                  --outprefix ${outprefix} \
-                  --savealignments False \
-                  --fastalinewidth ${FASTALINEWIDTH} \
-                  --overwrite ${OVERWRITE} \
-                  &> ${logpath}"
-                cmd=`echo ${cmd} | sed 's/  */ /g'`
-                PrintMsg "Info : RunPoremapstats : Running ${cmd}"
-                ${poremapstats_prog} \
-                  --bindir ${bindir} \
-                  --profilepath None \
-                  --runid ${exptid} \
-                  --readtype ${readtypelongfmt} \
-                  --readclass ${readclass} \
-                  --datatype minion \
-                  --mapprog bwa \
-                  --mapparams "-x ont2d -M" \
-                  --alignclasspath None \
-                  --readsbam ${bampath} \
-                  --targetrefpath ${targetfasta} \
-                  --controlrefpath ${controlfasta} \
-                  --outdir ${outdir}/04-bwamem \
-                  --outprefix ${outprefix} \
-                  --savealignments False \
-                  --fastalinewidth ${FASTALINEWIDTH} \
-                  --overwrite ${OVERWRITE} \
-                  &> ${logpath}
-                retval=`echo $?`
-                if [[ ${retval} -ne 0 ]]; then
-                    PrintMsg "Warn : RunPoremapstats : Cmd with return code ${retval} : ${cmd}"
-                    exit ${retval}
-                fi
-            done
-        done
-    done
-
-    PrintMsg "Info : RunPoremapstats : Finished"
 }
 
 function AggregateStats
@@ -285,7 +151,7 @@ function AggregateStats
 function NanookReports
 {
     PrintMsg "Info : NanookReports : Started"
-    if [ ! -d ${outdir}/07-nanookreports ] ; then mkdir -p ${outdir}/07-nanook ; fi
+    if [ ! -d ${outdir}/07-nanookreports ] ; then mkdir -p ${outdir}/07-nanookreports ; fi
     cmd="${marcoporo_prog} nanookreports \
         -bin ${bindir} \
         -profile None \
@@ -308,12 +174,11 @@ function NanookReports
 PrintMsg "Info : run_marcp2_analysis.sh"
 PrintMsg "Info : Started"
 
-#CheckRawDirStructure ${exptfile}
-#ExtractExptConstants
-#ExtractBasecalls
+CheckRawDirStructure
+ExtractExptConstants
+ExtractBasecalls
 MapWithBwa
-#RunPoremapstats
-#AggregateStats
+AggregateStats
 #MarginAlign	# Not implemented yet
 #NanookReports
 
