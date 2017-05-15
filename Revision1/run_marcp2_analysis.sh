@@ -108,12 +108,32 @@ function ExtractBasecalls
     PrintMsg "Info : ExtractBasecalls : Finished"
 }
 
- # /well/bsg/microbial/soft/rescomp/src/bwa/v0.7.5a-r405/bwa mem -x ont2d -M -t 1 /well/bsg/microbial/marc/phase2/Revision1/testing/01-config/references.fasta ./03-extract/TP2-Lab7-R1-2D_2D_pass.fastq | samtools view -b -S - | samtools sort > 04-bwamem/TP2-Lab7-R1-2D_2D_pass.bam
+function MapWithBwa
+{
+    PrintMsg "Info : MapWithBwa : Started"
+    #tail -n +2 ${exptfile} | while read exptid phase lab replicate libtype dirpath instanceN ; do
+     #   PrintMsg "Info : MapWithBwa : Processing ${exptid}"
+        cmd="${marcoporo_prog} mapwithbwa \
+          -bin ${bindir} \
+          -profile None \
+          -config ${marcoporoconfigfile} \
+          -experiments ${exptfile} \
+          -extractdir ${outdir}/03-extract \
+          -bwamemdir ${outdir}/04-bwamem \
+          -overwrite ${OVERWRITE}"
+        cmd=`echo ${cmd} | sed 's/  */ /g'`
+        echo "Running $cmd"
+        $cmd
+        retval=`echo $?`
+        if [[ ${retval} -ne 0 ]]; then exit ${retval} ; fi
+    #done
+    PrintMsg "Info : MapWithBwa : Finished"
+}
 
-function MapReadsWithBwaMem
+function MapWithBwaMem-Shell
 {
   # Map reads from each non-empty FASTQ file in the extract dir
-    PrintMsg "Info : MapReadsWithBwaMem : Started"
+    PrintMsg "Info : MapWithBwaMem : Started"
     if [ ! -d ${outdir}/04-bwamem ] ; then mkdir -p ${outdir}/04-bwamem ; fi
     ls ${outdir}/03-extract/*.fastq | while read fastqpath ; do
         if [ -s ${fastqpath} ] ; then
@@ -128,35 +148,35 @@ function MapReadsWithBwaMem
                   | ${samtools_prog} sort - ${outbampathstem} \
                   2> ${outbampathstem}.err"
                 cmd=`echo ${cmd} | sed 's/  */ /g'`
-                PrintMsg "Info : MapReadsWithBwamem : Running ${cmd}"
+                PrintMsg "Info : MapWithBwamem : Running ${cmd}"
                 (${bwa_prog} mem -x ont2d -M -t ${THREADS} ${reffasta} ${fastqpath} \
                   | ${samtools_prog} view -b -S - \
                   | ${samtools_prog} sort - ${outbampathstem}) 2> ${outbampathstem}.err
                 retval=`echo $?`
                 if [[ ${retval} -ne 0 ]]; then
-                    PrintMsg "Warn : MapReadsWithBwamem : Cmd with return code ${retval} : ${cmd}"
+                    PrintMsg "Warn : MapWithBwamem : Cmd with return code ${retval} : ${cmd}"
                     exit ${retval}
                 fi
               # Create BAM index file
                 cmd="${samtools_prog} index ${outbampath}"
-                PrintMsg "Info : MapReadsWithBwamem : Running ${cmd}"
+                PrintMsg "Info : MapWithBwamem : Running ${cmd}"
                 ${samtools_prog} index ${outbampath}
                 retval=`echo $?`
                 if [[ ${retval} -ne 0 ]]; then
-                    PrintMsg "Warn : MapReadsWithBwamem : Cmd with return code ${retval} : ${cmd}"
+                    PrintMsg "Warn : MapWithBwamem : Cmd with return code ${retval} : ${cmd}"
                     exit ${retval}
                 fi
             else
-                PrintMsg "Info : MapReadsWithBwamem : Output already exists ${outbampath}"
+                PrintMsg "Info : MapWithBwamem : Output already exists ${outbampath}"
             fi
         else
-            PrintMsg "Info : MapReadsWithBwamem : Ignoring empty file ${fastqpath}"
+            PrintMsg "Info : MapWithBwamem : Ignoring empty file ${fastqpath}"
         fi
     done
-    PrintMsg "Info : MapReadsWithBwaMem : Finished"
+    PrintMsg "Info : MapWithBwaMem : Finished"
 }
 
-function RunPoremapstats
+function RunPoremapstats-Shell
 {
     PrintMsg "Info : RunPoremapstats : Started"
 
@@ -288,14 +308,14 @@ function NanookReports
 PrintMsg "Info : run_marcp2_analysis.sh"
 PrintMsg "Info : Started"
 
-CheckRawDirStructure ${exptfile}
-ExtractExptConstants
-ExtractBasecalls
-MapReadsWithBwaMem
-RunPoremapstats
-AggregateStats
+#CheckRawDirStructure ${exptfile}
+#ExtractExptConstants
+#ExtractBasecalls
+MapWithBwa
+#RunPoremapstats
+#AggregateStats
 #MarginAlign	# Not implemented yet
-NanookReports
+#NanookReports
 
 PrintMsg "Info : Finished"
 
