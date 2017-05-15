@@ -83,26 +83,22 @@ function ExtractBasecalls
 {
   # Need to implement overwrite feature
     PrintMsg "Info : ExtractBasecalls : Started"
-    tail -n +2 ${exptfile} | while read exptid phase lab replicate libtype dirpath instanceN ; do
-        PrintMsg "Info : ExtractBasecalls : Processing ${exptid}"
-        cmd="${marcoporo_prog} extractone
-          -exptid ${exptid} \
-          -bin ${bindir} \
-          -profile None \
-          -config ${marcoporoconfigfile} \
-          -exptconstants ${outdir}/02-exptconstants/exptconstants.txt \
-          -exptconstantfields ${outdir}/02-exptconstants/exptconstantfields.txt \
-          -indir ${dirpath} \
-          -instanceN ${instanceN} \
-          -outdir ${outdir}/03-extract \
-          -fastq True \
-          -pairs False \
-          -stats True"
-        cmd=`echo ${cmd} | sed 's/  */ /g'`
-        $cmd
-        retval=`echo $?`
-        if [[ ${retval} -ne 0 ]]; then exit ${retval} ; fi
-    done
+    cmd="${marcoporo_prog} extract \
+      -bin ${bindir} \
+      -profile None \
+      -config ${marcoporoconfigfile} \
+      -exptconstants ${outdir}/02-exptconstants/exptconstants.txt \
+      -exptconstantfields ${outdir}/02-exptconstants/exptconstantfields.txt \
+      -experiments ${exptfile} \
+      -extractdir ${outdir}/03-extract \
+      -fastq True \
+      -pairs False \
+      -stats True"
+    cmd=`echo ${cmd} | sed 's/  */ /g'`
+    $cmd
+    retval=`echo $?`
+    if [[ ${retval} -ne 0 ]]; then exit ${retval} ; fi
+
     PrintMsg "Info : ExtractBasecalls : Finished"
 }
 
