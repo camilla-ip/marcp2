@@ -81,7 +81,6 @@ function ExtractExptConstants
 
 function ExtractBasecalls
 {
-  # Need to implement overwrite feature
     PrintMsg "Info : ExtractBasecalls : Started"
     cmd="${marcoporo_prog} extract \
       -bin ${bindir} \
@@ -93,8 +92,10 @@ function ExtractBasecalls
       -extractdir ${outdir}/03-extract \
       -fastq True \
       -pairs False \
-      -stats True"
+      -stats True \
+      -overwrite ${OVERWRITE}"
     cmd=`echo ${cmd} | sed 's/  */ /g'`
+    echo "Running ${cmd}"
     $cmd
     retval=`echo $?`
     if [[ ${retval} -ne 0 ]]; then exit ${retval} ; fi
@@ -124,6 +125,29 @@ function MapWithBwa
 function AggregateStats
 {
     PrintMsg "Info : AggregateStats : Started"
+    cmd="${marcoporo_prog} aggregate \
+      -bin ${bindir} \
+      -profile None \
+      -config ${marcoporoconfigfile} \
+      -experiments ${exptfile} \
+      -extractdir ${outdir}/03-extract \
+      -bwamemdir ${outdir}/04-bwamem \
+      -aggregatedir ${outdir}/05-aggregate \
+      -maxrunlen ${MAXRUNLEN} \
+      -timebucket ${TIMEBUCKET} \
+      -outdir ${outdir}/05-aggregate \
+      -overwrite ${OVERWRITE}"
+    cmd=`echo ${cmd} | sed 's/  */ /g'`
+    echo "Running ${cmd}"
+    $cmd
+    retval=`echo $?`
+    if [[ ${retval} -ne 0 ]]; then exit ${retval} ; fi
+    PrintMsg "Info : AggregateStats : Finished"
+}
+
+function AggregateStats-Old
+{
+    PrintMsg "Info : AggregateStats : Started"
     tail -n +2 ${exptfile} | while read exptid phase lab replicate libtype dirpath instanceN ; do
         PrintMsg "Info : AggregateStats : Processing ${exptid}"
         cmd="${marcoporo_prog} aggregateone \
@@ -142,6 +166,28 @@ function AggregateStats
         if [[ ${retval} -ne 0 ]]; then exit ${retval} ; fi
     done
     PrintMsg "Info : AggregateStats : Finished"
+}
+
+function MarginAlign
+{
+    # Run marginAlign 
+    PrintMsg "Info : marginalign : Started"
+    if [ ! -d ${outdir}/06-marginalign ] ; then mkdir -p ${outdir}/06-marginalign ; fi
+    cmd="${marcoporo_prog} marginalign \
+        -bin ${bindir} \
+        -profile None \
+        -config ${marcoporoconfigfile} \
+        -experiments ${exptfile} \
+        -threads ${THREADS} \
+        -extractdir ${outdir}/03-extract \
+        -outdir ${outdir}/06-marginalign \
+        -overwrite ${OVERWRITE}"
+    cmd=`echo ${cmd} | sed 's/  */ /g'`
+    echo ${cmd}
+    $cmd
+    retval=`echo $?`
+    if [[ ${retval} -ne 0 ]]; then exit ${retval} ; fi
+    PrintMsg "Info : marginalign : Finished"
 }
 
 function NanookReports
@@ -170,12 +216,12 @@ function NanookReports
 PrintMsg "Info : run_marcp2_analysis.sh"
 PrintMsg "Info : Started"
 
-CheckRawDirStructure
-ExtractExptConstants
-ExtractBasecalls
-MapWithBwa
-AggregateStats
-#MarginAlign	# Not implemented yet
+#CheckRawDirStructure
+#ExtractExptConstants
+#ExtractBasecalls
+#MapWithBwa
+#AggregateStats
+MarginAlign
 #NanookReports
 
 PrintMsg "Info : Finished"
