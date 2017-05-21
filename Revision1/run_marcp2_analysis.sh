@@ -32,6 +32,7 @@ OVERWRITE=False
 MAXRUNLEN=48
 TIMEBUCKET=0.25
 FASTALINEWIDTH=100
+READLENMAX=40000
 
 readtypeL=(1T 1C 2D)
 readclassL=(pass fail)
@@ -211,6 +212,45 @@ function NanookReports
     PrintMsg "Info : NanookReports : Finished"
 }
 
+function GenerateFigure1
+{
+    PrintMsg "Info : GenerateFigure1 : Started"
+    # Create output dir
+    if [ ! -d ${outdir}/08-analysis ] ; then mkdir -p ${outdir}/08-analysis ; fi
+    # Generate data file plot
+    datafile=${outdir}/08-analysis/Figure_readlengths.txt
+    cmd="${bindir}/Figure_readlengths_getdata.sh \
+        ${exptfile} \
+        ${outdir}/03-extract \
+        > ${datafile}"
+    cmd=`echo ${cmd} | sed 's/  */ /g'`
+    echo ${cmd}
+    #${bindir}/Figure_readlengths.sh \
+    #    ${exptfile} \
+    #    ${outdir}/03-extract \
+    #    > ${datafile}
+    retval=`echo $?`
+    if [[ ${retval} -ne 0 ]]; then exit ${retval} ; fi
+    # Generate plot
+    cmd="Rscript ${bindir}/Figure_readlengths_getplot.R \
+        ${datafile} \
+        ${bindir}/Figure_style.R \
+        ${READLENMAX} \
+        ${outdir}/08-analysis \
+        Figure_readlengths"
+    cmd=`echo ${cmd} | sed 's/  */ /g'`
+    echo ${cmd}
+    Rscript ${bindir}/Figure_readlengths.R \
+        ${datafile} \
+        ${bindir}/Figure_style.R \
+        ${READLENMAX} \
+        ${outdir}/08-analysis \
+        Figure_readlengths
+    retval=`echo $?`
+    if [[ ${retval} -ne 0 ]]; then exit ${retval} ; fi
+    PrintMsg "Info : GenerateFigure1 : Finished"
+}
+
 # ===== MAIN =====
 
 PrintMsg "Info : run_marcp2_analysis.sh"
@@ -221,8 +261,9 @@ PrintMsg "Info : Started"
 #ExtractBasecalls
 #MapWithBwa
 #AggregateStats
-MarginAlign
+#MarginAlign
 #NanookReports
+GenerateFigure1
 
 PrintMsg "Info : Finished"
 
