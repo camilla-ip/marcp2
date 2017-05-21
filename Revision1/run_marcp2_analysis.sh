@@ -219,35 +219,40 @@ function GenerateFigure1
     if [ ! -d ${outdir}/08-analysis ] ; then mkdir -p ${outdir}/08-analysis ; fi
     # Generate data file plot
     datafile=${outdir}/08-analysis/Figure_readlengths.txt
-    cmd="${bindir}/Figure_readlengths_getdata.sh \
-        ${exptfile} \
-        ${outdir}/03-extract \
-        > ${datafile}"
-    cmd=`echo ${cmd} | sed 's/  */ /g'`
-    echo ${cmd}
-    #${bindir}/Figure_readlengths.sh \
-    #    ${exptfile} \
-    #    ${outdir}/03-extract \
-    #    > ${datafile}
-    retval=`echo $?`
-    if [[ ${retval} -ne 0 ]]; then exit ${retval} ; fi
-    # Generate plot
-    cmd="Rscript ${bindir}/Figure_readlengths_getplot.R \
-        ${datafile} \
-        ${bindir}/Figure_style.R \
-        ${READLENMAX} \
-        ${outdir}/08-analysis \
-        Figure_readlengths"
-    cmd=`echo ${cmd} | sed 's/  */ /g'`
-    echo ${cmd}
-    Rscript ${bindir}/Figure_readlengths.R \
-        ${datafile} \
-        ${bindir}/Figure_style.R \
-        ${READLENMAX} \
-        ${outdir}/08-analysis \
-        Figure_readlengths
-    retval=`echo $?`
-    if [[ ${retval} -ne 0 ]]; then exit ${retval} ; fi
+    pngfile=${outdir}/08-analysis/Figure_readlengths.png
+    if [[ ${OVERWRITE} == "True" ]] || [[ ! -s ${pngfile} ]] ; then
+        cmd="${bindir}/Figure_readlengths_getdata.sh \
+            ${exptfile} \
+            ${outdir}/03-extract \
+            > ${datafile}"
+        cmd=`echo ${cmd} | sed 's/  */ /g'`
+        echo ${cmd}
+        ${bindir}/Figure_readlengths.sh \
+            ${exptfile} \
+            ${outdir}/03-extract \
+            > ${datafile}
+        retval=`echo $?`
+        if [[ ${retval} -ne 0 ]]; then exit ${retval} ; fi
+        # Generate plot
+        cmd="Rscript ${bindir}/Figure_readlengths_getplot.R \
+            ${datafile} \
+            ${bindir}/Figure_style.R \
+            ${READLENMAX} \
+            ${outdir}/08-analysis \
+            Figure_readlengths"
+        cmd=`echo ${cmd} | sed 's/  */ /g'`
+        echo ${cmd}
+        Rscript ${bindir}/Figure_readlengths.R \
+            ${datafile} \
+            ${bindir}/Figure_style.R \
+            ${READLENMAX} \
+            ${outdir}/08-analysis \
+            Figure_readlengths
+        retval=`echo $?`
+        if [[ ${retval} -ne 0 ]]; then exit ${retval} ; fi
+    else
+        PrintMsg "Info : GenerateFigure1 : Skipping as outfiles already exists ${pngfile}"
+    fi
     PrintMsg "Info : GenerateFigure1 : Finished"
 }
 
