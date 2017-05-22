@@ -8,7 +8,6 @@ presented in Revision 1 of the MARC Phase 2 study.
 - System: Linux or Mac OSX
 - Environment: BASH
 - Disk: 1.5 TB (1.1 TB for raw data and another 0.4 TB for analysis)
-- CPU: Multi-core server or a cluster with Sun Grid Engine (SGE) scheduling
 
 ## Step 1. Download third-party software
 
@@ -168,4 +167,11 @@ ${PHASE2}
     Figure_readlengths.[txt|png]
     Figure_performancemetrics.[txt|png]
 ```
+
+## Contact
+
+For support, comments or bug reports:
+
+- Camilla Ip (camilla.ip@well.ox.ac.uk)
+- Miten Jain (miten@soe.ucsc.edu)
 
