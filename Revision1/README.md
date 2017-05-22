@@ -7,7 +7,7 @@ presented in Revision 1 of the MARC Phase 2 study.
 
 - System: Linux or Mac OSX
 - Environment: BASH
-- Disk: XXXX TB for raw data, XXXX TB for analysis
+- Disk: 1.5 TB (1.1 TB for raw data and another 0.4 TB for analysis)
 - CPU: Multi-core server or a cluster with Sun Grid Engine (SGE) scheduling
 
 ## Step 1. Download third-party software
@@ -15,27 +15,32 @@ presented in Revision 1 of the MARC Phase 2 study.
 Bioinformatics software:
 - bwa 0.7.12-r1039
 - marcoporo 1.0
-- marginAlign XXXX
-- nanook XXXX
+- marginAlign 0.1
+- nanook 0.95
 - poretools 0.5.1
 - SAMtools 0.1.19-44428cd
 
 R packages:
-- XXXX
+- ggplot2
+- grid
+- methods
+- plyr
+- reshape2
+- RColorBrewer
 
 Python packages:
-- XXXX
+- h5py
+- Bio
 
 ## Step 2. Download raw experimental data
 
-Use ncftp (or similar) to download the raw FAST5 data for each experiment:
-```
-P1b-Lab2-R2-2D : URL
-P2-Lab6-R1-2D : URL
-P2-Lab7-R1-2D : URL
-P2-Lab6-R1-1D : URL
-P2-Lab7-R1-1D : URL
-```
+Use ncftp (or similar) to download the raw FAST5 data for each experiment from the
+European Nucleotide Archive (ENA) at https://www.ebi.ac.uk/ena
+
+The Phase 1 data for experiment P1b-Lab2-R2-2D is available under Project ID PRJEB11008.
+
+The Phase 2 data for experiments P2-Lab6-R1-2D, P2-Lab6-R1-2D, P2-Lab6-R1-1D and P2-Lab7-R1-1D
+are available under Project ID PRJEB18053.
 
 Unzip, rename and/or move the files around until the file hierarchy has structure:
 ```
@@ -114,11 +119,53 @@ $PHASE2
 ```
 ${MARCP2}/Revision1/run_marcp2_analysis.sh \
   ${PHASE2}/01-config/experiments.txt \
-  ${PHASE2}/01-config/marcoporo-config.txt \
+  ${PHASE2}/01-config/marcoporo_config.txt \
+  ${MARCP2}/Revision1 \
   ${PHASE2}
 ```
 
 ## Analysis output
 
-XXXX
+```
+${PHASE2}
+  /02-exptcontstants
+    /exptconstantfields.txt
+    /exptconstants.txt
+  /03-extract
+    /EXPTID_[1T|1C|2D]_[fail|pass].fastq
+    /EXPTID_batch.txt
+    /EXPTID_exptstats.txt
+    /EXPTID_read1dstats.txt
+    /EXPTID_read2dstats.txt
+    /EXPTID_readeventstats.txt
+    /EXPTID_readstats.txt
+  /04-bwamem
+    /EXPTID_[1T|1C|2D]_[fail|pass].bam
+    /EXPTID_[1T|1C|2D]_[fail|pass].bam.bai
+    /EXPTID_[1T|1C|2D]_[fail|pass].err
+    /EXPTID_[1T|1C|2D]_[fail|pass]_initstats.txt
+    /EXPTID_[1T|1C|2D]_[fail|pass]_readstats.txt
+    /EXPTID_[1T|1C|2D]_[fail|pass]_runstats.txt
+    /EXPTID_[1T|1C|2D]_[fail|pass]_poremapstats.log
+  /05-aggregate
+    /EXPTID_aggregate_[read1d|read2d]_basespersecond.txt
+    /EXPTID_aggregate_[read1d|read2d]_bqmean.txt
+    /EXPTID_aggregate_[read1d|read2d]_gcpct.txt
+    /EXPTID_aggregate_[read1d|read2d]_meanqscore.txt
+    /EXPTID_aggregate_[read1d|read2d]_seqlen.txt
+    /EXPTID_aggregate_[read1d|read2d]_basespersecond.txt
+    /EXPTID_aggregate_readevent.txt
+    /EXPTID_merged1dstats.txt
+    /EXPTID_merged2dstats.txt
+  /06-marginalign
+    /EXPTID_[fail|pass]_[BWANoRealign|BWAMEM10M].[sam|stats]
+  /07-nanookreports
+    /EXPTID
+        /latex_bwa_failonly/EXPTID_failonly.pdf
+        /latex_bwa_passonly/EXPTID_passonly.pdf
+        /latex_bwa_passfail/EXPTID_passfail.pdf
+  /08-analysis
+    Figure_readlengths.[txt|png]
+    Figure_performancemetrics.[txt|png]
+```
 
