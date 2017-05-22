@@ -10,8 +10,8 @@ Download a copy of this repository:
 
 ```
 cd /PATH/TO/YOUR/THIRD/PARTY/SOFTWARE/DIR
-git clone git@github.com:camilla-ip/marcp2.git
 ```
+then make a copy of the files here, uncompressing if required.
 
 ## Revision 1
 

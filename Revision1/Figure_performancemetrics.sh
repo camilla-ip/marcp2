@@ -7,8 +7,6 @@ fi
 exptfile=${1}
 aggregatedir=${2}
 
-# FUNCTIONS
-
 function extract_1T_values
 {
     indir=${aggregatedir}

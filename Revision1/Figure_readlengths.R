@@ -76,4 +76,3 @@ Construct_Figure <- function()
 }
 
 Construct_Figure()
-#warnings()

@@ -7,8 +7,6 @@ fi
 exptfile=${1}
 extractdir=${2}
 
-# FUNCTIONS
-
 function extract_1T_values
 {
     indir=${extractdir}
@@ -41,18 +39,7 @@ function create_input_data_table
 {
   # Header
     printf "Experiment\tphase\tlab\treplicate\tlibtype\tmetric\treadtype\treadclass\tvalue\n"
-  # Constants
-
-  # Each metric, then each expt
-    #extract_1T_values TP1b-Lab2-R2-2D "Length"
-    #extract_1T_values TP2-Lab6-R1-1D "Length"
-    #extract_1T_values TP2-Lab7-R1-1D "Length"
-    #extract_1T_values TP2-Lab6-R1-2D "Length"
-    #extract_1T_values TP2-Lab7-R1-2D "Length"
-    #extract_2D_values TP1b-Lab2-R2-2D "Length"
-    #extract_2D_values TP2-Lab6-R1-2D "Length"
-    #extract_2D_values TP2-Lab7-R1-2D "Length"
-
+  # Body
     tail -n +2 ${exptfile} | while read exptid phase lab replicate libtype dirpath instanceN ; do
         extract_1T_values ${exptid} "Length"
     done
@@ -63,13 +50,4 @@ function create_input_data_table
     done
 }
 
-function make_plot
-{
-    Rscript Figure1_readlengths.R
-}
-
-# MAIN
-
 create_input_data_table
-#make_plot
-

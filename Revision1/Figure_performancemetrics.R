@@ -14,8 +14,6 @@ stylefile <- args[2]
 outdir <- args[3]
 outprefix <- args[4]
 
-#inputfile <- 'Figure2_performancemetrics.txt'
-#imagefile <- 'Figure2_performancemetrics.png'
 imagefile <- sprintf("%s/%s.png", outdir, outprefix)
 
 library(RColorBrewer)
@@ -85,4 +83,3 @@ Construct_Figure <- function()
 }
 
 Construct_Figure()
-#warnings()
