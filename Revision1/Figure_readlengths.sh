@@ -53,10 +53,10 @@ function create_input_data_table
     #extract_2D_values TP2-Lab6-R1-2D "Length"
     #extract_2D_values TP2-Lab7-R1-2D "Length"
 
-    tail -n +2 experiments.txt | while read exptid phase lab replicate libtype dirpath instanceN ; do
+    tail -n +2 ${exptfile} | while read exptid phase lab replicate libtype dirpath instanceN ; do
         extract_1T_values ${exptid} "Length"
     done
-    tail -n +2 experiments.txt | while read exptid phase lab replicate libtype dirpath instanceN ; do
+    tail -n +2 ${exptfile} | while read exptid phase lab replicate libtype dirpath instanceN ; do
         if [ $libtype = "2D" ] ; then
             extract_2D_values ${exptid} "Length"
         fi

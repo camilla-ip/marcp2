@@ -221,7 +221,7 @@ function GenerateFigure1
     datafile=${outdir}/08-analysis/Figure_readlengths.txt
     pngfile=${outdir}/08-analysis/Figure_readlengths.png
     if [[ ${OVERWRITE} == "True" ]] || [[ ! -s ${pngfile} ]] ; then
-        cmd="${bindir}/Figure_readlengths_getdata.sh \
+        cmd="${bindir}/Figure_readlengths.sh \
             ${exptfile} \
             ${outdir}/03-extract \
             > ${datafile}"
@@ -234,7 +234,7 @@ function GenerateFigure1
         retval=`echo $?`
         if [[ ${retval} -ne 0 ]]; then exit ${retval} ; fi
         # Generate plot
-        cmd="Rscript ${bindir}/Figure_readlengths_getplot.R \
+        cmd="Rscript ${bindir}/Figure_readlengths.R \
             ${datafile} \
             ${bindir}/Figure_style.R \
             ${READLENMAX} \
@@ -256,19 +256,62 @@ function GenerateFigure1
     PrintMsg "Info : GenerateFigure1 : Finished"
 }
 
+function GenerateFigure2
+{
+    PrintMsg "Info : GenerateFigure2 : Started"
+    # Create output dir
+    if [ ! -d ${outdir}/08-analysis ] ; then mkdir -p ${outdir}/08-analysis ; fi
+    # Generate data file plot
+    datafile=${outdir}/08-analysis/Figure_performancemetrics.txt
+    pngfile=${outdir}/08-analysis/Figure_performancemetrics.png
+    if [[ ${OVERWRITE} == "True" ]] || [[ ! -s ${pngfile} ]] ; then
+        cmd="${bindir}/Figure_performancemetrics.sh \
+            ${exptfile} \
+            ${outdir}/05-extract \
+            > ${datafile}"
+        cmd=`echo ${cmd} | sed 's/  */ /g'`
+        echo ${cmd}
+        ${bindir}/Figure_performancemetrics.sh \
+            ${exptfile} \
+            ${outdir}/05-aggregate \
+            > ${datafile}
+        retval=`echo $?`
+        if [[ ${retval} -ne 0 ]]; then exit ${retval} ; fi
+        # Generate plot
+        cmd="Rscript ${bindir}/Figure_performancemetrics.R \
+            ${datafile} \
+            ${bindir}/Figure_style.R \
+            ${outdir}/08-analysis \
+            Figure_performancemetrics"
+        cmd=`echo ${cmd} | sed 's/  */ /g'`
+        echo ${cmd}
+        Rscript ${bindir}/Figure_performancemetrics.R \
+            ${datafile} \
+            ${bindir}/Figure_style.R \
+            ${outdir}/08-analysis \
+            Figure_performancemetrics
+        retval=`echo $?`
+        if [[ ${retval} -ne 0 ]]; then exit ${retval} ; fi
+    else
+        PrintMsg "Info : GenerateFigure2 : Skipping as outfiles already exists ${pngfile}"
+    fi
+    PrintMsg "Info : GenerateFigure2 : Finished"
+}
+
 # ===== MAIN =====
 
 PrintMsg "Info : run_marcp2_analysis.sh"
 PrintMsg "Info : Started"
 
-#CheckRawDirStructure
-#ExtractExptConstants
-#ExtractBasecalls
-#MapWithBwa
-#AggregateStats
-#MarginAlign
-#NanookReports
+CheckRawDirStructure
+ExtractExptConstants
+ExtractBasecalls
+MapWithBwa
+AggregateStats
+MarginAlign
+NanookReports
 GenerateFigure1
+GenerateFigure2
 
 PrintMsg "Info : Finished"
 
